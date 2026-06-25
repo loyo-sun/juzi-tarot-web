@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>橘子塔罗</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-mark">橘</span>
+          <div>
+            <p>Orange Tarot</p>
+            <h1>橘子塔罗</h1>
+          </div>
+        </div>
+        <div class="quota-display" id="quota-display" style="display: none;">
+          <div>
+            <span>提问次数</span>
+            <strong id="question-count">2</strong>
+          </div>
+          <div>
+            <span>追问次数</span>
+            <strong id="followup-count">3</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="stage-card" aria-live="polite">
+        <!-- Step 1: 兑换码 -->
+        <section class="step-section" id="step-code" data-step="code">
+          <div class="step-content">
+            <div class="copy-block centered">
+              <p class="label">Step 01</p>
+              <h2>输入兑换码，打开你的牌桌</h2>
+            </div>
+            <form class="code-form" id="code-form">
+              <input id="code-input" autocomplete="off" placeholder="请输入兑换码" value="JUZI-2026-ABCD" />
+              <button class="primary-button" type="submit">确认兑换码</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Step 2: 提问 -->
+        <section class="step-section" id="step-question" data-step="question" style="display: none;">
+          <div class="step-content">
+            <div class="copy-block centered">
+              <p class="label">Step 02</p>
+              <h2>把你想问的问题告诉橘子</h2>
+            </div>
+            <form class="question-form" id="question-form">
+              <input class="question-input-line" id="question-input" maxlength="90" placeholder="把你想问的问题告诉橘子" value="我和对方接下来的关系会如何发展？" />
+              <button class="primary-button" type="submit">开始洗牌</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Step 3: 洗牌与切牌 -->
+        <section class="step-section" id="step-shuffle" data-step="shuffle" style="display: none;">
+          <div class="step-content">
+            <div class="shuffle-stage">
+              <div class="energy-ring"></div>
+              <div class="energy-ring ring-large"></div>
+              <div class="shuffle-deck">
+                <div class="deck-pile">
+                  <div class="shuffle-card" style="--i: 0"></div>
+                  <div class="shuffle-card" style="--i: 1"></div>
+                  <div class="shuffle-card" style="--i: 2"></div>
+                  <div class="shuffle-card" style="--i: 3"></div>
+                  <div class="shuffle-card" style="--i: 4"></div>
+                </div>
+              </div>
+              <div class="cut-deck-container">
+                <div class="cut-deck left"></div>
+                <div class="cut-deck right"></div>
+              </div>
+            </div>
+            <div class="copy-block centered">
+              <p class="label">Energy Connecting</p>
+              <h2>正在洗牌与切牌</h2>
+              <p>橘子正在把你的问题放进牌桌中央</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 4: 抽牌 -->
+        <section class="step-section" id="step-draw" data-step="draw" style="display: none;">
+          <div class="step-content">
+            <div class="draw-header">
+              <div class="copy-block centered">
+                <p class="label">Step 04</p>
+                <h2>从 78 张牌中抽 3 张</h2>
+                <p class="question-summary" id="draw-question">我和对方接下来的关系会如何发展？</p>
+              </div>
+              <div class="draw-counter" id="draw-counter">0 / 3</div>
+            </div>
+
+            <section class="full-deck" id="full-deck" aria-label="78 张塔罗牌背面"></section>
+
+            <section class="selected-strip" id="selected-strip" aria-label="已抽取的三张牌">
+              <span></span>
+              <span></span>
+              <span></span>
+            </section>
+          </div>
+        </section>
+
+        <!-- Step 5: 解析结果 -->
+        <section class="step-section" id="step-result" data-step="result" style="display: none;">
+          <div class="step-content">
+            <div class="result-layout">
+              <section class="spread-result">
+                <div class="copy-block">
+                  <p class="label">Step 05</p>
+                  <h2>三张牌已经展开</h2>
+                  <p id="result-question">我和对方接下来的关系会如何发展？</p>
+                </div>
+                <div class="result-spread" id="result-spread"></div>
+              </section>
+
+              <section class="reading-panel">
+                <p class="label">牌阵解析</p>
+                <h2 id="reading-title">正在生成解析</h2>
+                <div class="reading-text" id="reading-text">橘子正在读取这组三张牌之间的关系。</div>
+
+                <div class="follow-panel">
+                  <label for="follow-input">继续追问</label>
+                  <textarea id="follow-input" maxlength="80" placeholder="你想继续问什么？"></textarea>
+                  <div class="action-row">
+                    <button class="primary-button" id="follow-button" type="button">抽追问牌</button>
+                    <button class="ghost-button" id="angel-button" type="button">天使祝福</button>
+                  </div>
+                  <p class="hint" id="follow-hint">还可以追问 3 次。天使祝福每个主问题仅一次。</p>
+                </div>
+
+                <div class="blessing-box" id="blessing-box">
+                  <span>✦</span>
+                  <p>愿你在还没确定答案的时候，也能先安稳地照顾自己。</p>
+                </div>
+
+                <div class="action-row">
+                  <button class="ghost-button" id="restart-button" type="button">重新开始</button>
+                  <button class="primary-button" id="save-button" type="button">保存结果</button>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

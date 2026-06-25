@@ -1,0 +1,10 @@
+{
+  "name": "juzi-tarot-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node local-server.mjs",
+    "check": "node --check public/app.js && node --check api/reading.js && node --check local-server.mjs"
+  }
+}

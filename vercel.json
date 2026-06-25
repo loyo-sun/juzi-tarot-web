@@ -1,0 +1,18 @@
+{
+  "functions": {
+    "api/reading.js": {
+      "runtime": "nodejs22.x"
+    }
+  },
+  "headers": [
+    {
+      "source": "/cards/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}

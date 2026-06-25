@@ -1,0 +1,1223 @@
+{
+  "source": "images/0.png through images/77.png, plus reviewed image2-style 78",
+  "count": 79,
+  "ratio": "16:25",
+  "style": "unified full-card illustration, no dark blurred side bars, consistent gold border",
+  "outputs": {
+    "web/full": {
+      "size": [
+        640,
+        1000
+      ],
+      "format": "WEBP"
+    },
+    "web/thumb": {
+      "size": [
+        256,
+        400
+      ],
+      "format": "WEBP"
+    },
+    "miniprogram/full": {
+      "size": [
+        480,
+        750
+      ],
+      "format": "JPEG"
+    },
+    "miniprogram/thumb": {
+      "size": [
+        192,
+        300
+      ],
+      "format": "JPEG"
+    }
+  },
+  "cards": [
+    {
+      "index": 0,
+      "name": "橘子塔罗牌背",
+      "source": "images/0.png",
+      "original_size": [
+        1092,
+        1700
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/0.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/0.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/0.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/0.jpg"
+      }
+    },
+    {
+      "index": 1,
+      "name": "愚者 The Fool",
+      "source": "images/1.png",
+      "original_size": [
+        1112,
+        1720
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/1.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/1.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/1.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/1.jpg"
+      }
+    },
+    {
+      "index": 2,
+      "name": "魔术师 The Magician",
+      "source": "images/2.png",
+      "original_size": [
+        1104,
+        1739
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/2.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/2.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/2.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/2.jpg"
+      }
+    },
+    {
+      "index": 3,
+      "name": "女祭司 The High Priestess",
+      "source": "images/3.png",
+      "original_size": [
+        1092,
+        1700
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/3.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/3.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/3.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/3.jpg"
+      }
+    },
+    {
+      "index": 4,
+      "name": "女皇 The Empress",
+      "source": "images/4.png",
+      "original_size": [
+        1064,
+        1672
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/4.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/4.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/4.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/4.jpg"
+      }
+    },
+    {
+      "index": 5,
+      "name": "皇帝 The Emperor",
+      "source": "images/5.png",
+      "original_size": [
+        1106,
+        1714
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/5.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/5.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/5.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/5.jpg"
+      }
+    },
+    {
+      "index": 6,
+      "name": "教皇 The Hierophant",
+      "source": "images/6.png",
+      "original_size": [
+        1084,
+        1692
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/6.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/6.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/6.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/6.jpg"
+      }
+    },
+    {
+      "index": 7,
+      "name": "恋人 The Lovers",
+      "source": "images/7.png",
+      "original_size": [
+        1112,
+        1720
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/7.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/7.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/7.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/7.jpg"
+      }
+    },
+    {
+      "index": 8,
+      "name": "战车 The Chariot",
+      "source": "images/8.png",
+      "original_size": [
+        1126,
+        1734
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/8.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/8.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/8.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/8.jpg"
+      }
+    },
+    {
+      "index": 9,
+      "name": "力量 Strength",
+      "source": "images/9.png",
+      "original_size": [
+        1124,
+        1732
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/9.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/9.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/9.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/9.jpg"
+      }
+    },
+    {
+      "index": 10,
+      "name": "隐士 The Hermit",
+      "source": "images/10.png",
+      "original_size": [
+        542,
+        846
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/10.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/10.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/10.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/10.jpg"
+      }
+    },
+    {
+      "index": 11,
+      "name": "命运之轮 Wheel of Fortune",
+      "source": "images/11.png",
+      "original_size": [
+        578,
+        882
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/11.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/11.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/11.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/11.jpg"
+      }
+    },
+    {
+      "index": 12,
+      "name": "正义 Justice",
+      "source": "images/12.png",
+      "original_size": [
+        1130,
+        1738
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/12.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/12.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/12.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/12.jpg"
+      }
+    },
+    {
+      "index": 13,
+      "name": "倒吊人 The Hanged Man",
+      "source": "images/13.png",
+      "original_size": [
+        1356,
+        1964
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/13.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/13.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/13.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/13.jpg"
+      }
+    },
+    {
+      "index": 14,
+      "name": "死神 Death",
+      "source": "images/14.png",
+      "original_size": [
+        1302,
+        1910
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/14.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/14.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/14.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/14.jpg"
+      }
+    },
+    {
+      "index": 15,
+      "name": "节制 Temperance",
+      "source": "images/15.png",
+      "original_size": [
+        570,
+        874
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/15.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/15.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/15.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/15.jpg"
+      }
+    },
+    {
+      "index": 16,
+      "name": "恶魔 The Devil",
+      "source": "images/16.png",
+      "original_size": [
+        1116,
+        1744
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/16.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/16.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/16.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/16.jpg"
+      }
+    },
+    {
+      "index": 17,
+      "name": "高塔 The Tower",
+      "source": "images/17.png",
+      "original_size": [
+        1100,
+        1708
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/17.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/17.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/17.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/17.jpg"
+      }
+    },
+    {
+      "index": 18,
+      "name": "星星 The Star",
+      "source": "images/18.png",
+      "original_size": [
+        1090,
+        1698
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/18.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/18.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/18.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/18.jpg"
+      }
+    },
+    {
+      "index": 19,
+      "name": "月亮 The Moon",
+      "source": "images/19.png",
+      "original_size": [
+        1128,
+        1736
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/19.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/19.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/19.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/19.jpg"
+      }
+    },
+    {
+      "index": 20,
+      "name": "太阳 The Sun",
+      "source": "images/20.png",
+      "original_size": [
+        1140,
+        1748
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/20.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/20.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/20.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/20.jpg"
+      }
+    },
+    {
+      "index": 21,
+      "name": "审判 Judgement",
+      "source": "images/21.png",
+      "original_size": [
+        1098,
+        1706
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/21.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/21.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/21.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/21.jpg"
+      }
+    },
+    {
+      "index": 22,
+      "name": "世界 The World",
+      "source": "images/22.png",
+      "original_size": [
+        1140,
+        1748
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/22.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/22.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/22.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/22.jpg"
+      }
+    },
+    {
+      "index": 23,
+      "name": "权杖一 Ace of Wands",
+      "source": "images/23.png",
+      "original_size": [
+        1136,
+        1744
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/23.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/23.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/23.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/23.jpg"
+      }
+    },
+    {
+      "index": 24,
+      "name": "权杖二 Two of Wands",
+      "source": "images/24.png",
+      "original_size": [
+        1108,
+        1716
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/24.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/24.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/24.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/24.jpg"
+      }
+    },
+    {
+      "index": 25,
+      "name": "权杖三 Three of Wands",
+      "source": "images/25.png",
+      "original_size": [
+        1104,
+        1712
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/25.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/25.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/25.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/25.jpg"
+      }
+    },
+    {
+      "index": 26,
+      "name": "权杖四 Four of Wands",
+      "source": "images/26.png",
+      "original_size": [
+        1110,
+        1718
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/26.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/26.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/26.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/26.jpg"
+      }
+    },
+    {
+      "index": 27,
+      "name": "权杖五 Five of Wands",
+      "source": "images/27.png",
+      "original_size": [
+        1204,
+        2038
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/27.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/27.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/27.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/27.jpg"
+      }
+    },
+    {
+      "index": 28,
+      "name": "权杖六 Six of Wands",
+      "source": "images/28.png",
+      "original_size": [
+        1212,
+        2046
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/28.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/28.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/28.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/28.jpg"
+      }
+    },
+    {
+      "index": 29,
+      "name": "权杖七 Seven of Wands",
+      "source": "images/29.png",
+      "original_size": [
+        1200,
+        2034
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/29.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/29.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/29.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/29.jpg"
+      }
+    },
+    {
+      "index": 30,
+      "name": "权杖八 Eight of Wands",
+      "source": "images/30.png",
+      "original_size": [
+        1208,
+        2042
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/30.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/30.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/30.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/30.jpg"
+      }
+    },
+    {
+      "index": 31,
+      "name": "权杖九 Nine of Wands",
+      "source": "images/31.png",
+      "original_size": [
+        1184,
+        2018
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/31.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/31.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/31.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/31.jpg"
+      }
+    },
+    {
+      "index": 32,
+      "name": "权杖十 Ten of Wands",
+      "source": "images/32.png",
+      "original_size": [
+        1138,
+        1972
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/32.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/32.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/32.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/32.jpg"
+      }
+    },
+    {
+      "index": 33,
+      "name": "权杖侍从 Page of Wands",
+      "source": "images/33.png",
+      "original_size": [
+        1222,
+        2056
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/33.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/33.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/33.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/33.jpg"
+      }
+    },
+    {
+      "index": 34,
+      "name": "权杖骑士 Knight of Wands",
+      "source": "images/34.png",
+      "original_size": [
+        1212,
+        2046
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/34.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/34.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/34.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/34.jpg"
+      }
+    },
+    {
+      "index": 35,
+      "name": "权杖王后 Queen of Wands",
+      "source": "images/35.png",
+      "original_size": [
+        1164,
+        1998
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/35.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/35.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/35.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/35.jpg"
+      }
+    },
+    {
+      "index": 36,
+      "name": "权杖国王 King of Wands",
+      "source": "images/36.png",
+      "original_size": [
+        1182,
+        2016
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/36.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/36.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/36.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/36.jpg"
+      }
+    },
+    {
+      "index": 37,
+      "name": "圣杯一 Ace of Cups",
+      "source": "images/37.png",
+      "original_size": [
+        599,
+        1016
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/37.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/37.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/37.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/37.jpg"
+      }
+    },
+    {
+      "index": 38,
+      "name": "圣杯二 Two of Cups",
+      "source": "images/38.png",
+      "original_size": [
+        1176,
+        2010
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/38.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/38.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/38.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/38.jpg"
+      }
+    },
+    {
+      "index": 39,
+      "name": "圣杯三 Three of Cups",
+      "source": "images/39.png",
+      "original_size": [
+        1124,
+        1958
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/39.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/39.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/39.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/39.jpg"
+      }
+    },
+    {
+      "index": 40,
+      "name": "圣杯四 Four of Cups",
+      "source": "images/40.png",
+      "original_size": [
+        1166,
+        2000
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/40.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/40.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/40.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/40.jpg"
+      }
+    },
+    {
+      "index": 41,
+      "name": "圣杯五 Five of Cups",
+      "source": "images/41.png",
+      "original_size": [
+        1154,
+        1988
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/41.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/41.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/41.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/41.jpg"
+      }
+    },
+    {
+      "index": 42,
+      "name": "圣杯六 Six of Cups",
+      "source": "images/42.png",
+      "original_size": [
+        1166,
+        2000
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/42.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/42.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/42.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/42.jpg"
+      }
+    },
+    {
+      "index": 43,
+      "name": "圣杯七 Seven of Cups",
+      "source": "images/43.png",
+      "original_size": [
+        1160,
+        1994
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/43.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/43.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/43.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/43.jpg"
+      }
+    },
+    {
+      "index": 44,
+      "name": "圣杯八 Eight of Cups",
+      "source": "images/44.png",
+      "original_size": [
+        1144,
+        1978
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/44.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/44.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/44.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/44.jpg"
+      }
+    },
+    {
+      "index": 45,
+      "name": "圣杯九 Nine of Cups",
+      "source": "images/45.png",
+      "original_size": [
+        1062,
+        1896
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/45.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/45.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/45.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/45.jpg"
+      }
+    },
+    {
+      "index": 46,
+      "name": "圣杯十 Ten of Cups",
+      "source": "images/46.png",
+      "original_size": [
+        1276,
+        2492
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/46.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/46.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/46.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/46.jpg"
+      }
+    },
+    {
+      "index": 47,
+      "name": "圣杯侍从 Page of Cups",
+      "source": "images/47.png",
+      "original_size": [
+        1380,
+        2212
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/47.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/47.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/47.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/47.jpg"
+      }
+    },
+    {
+      "index": 48,
+      "name": "圣杯骑士 Knight of Cups",
+      "source": "images/48.png",
+      "original_size": [
+        1010,
+        2226
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/48.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/48.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/48.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/48.jpg"
+      }
+    },
+    {
+      "index": 49,
+      "name": "圣杯王后 Queen of Cups",
+      "source": "images/49.png",
+      "original_size": [
+        1102,
+        1934
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/49.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/49.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/49.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/49.jpg"
+      }
+    },
+    {
+      "index": 50,
+      "name": "圣杯国王 King of Cups",
+      "source": "images/50.png",
+      "original_size": [
+        1161,
+        1993
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/50.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/50.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/50.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/50.jpg"
+      }
+    },
+    {
+      "index": 51,
+      "name": "宝剑一 Ace of Swords",
+      "source": "images/51.png",
+      "original_size": [
+        1310,
+        2526
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/51.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/51.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/51.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/51.jpg"
+      }
+    },
+    {
+      "index": 52,
+      "name": "宝剑二 Two of Swords",
+      "source": "images/52.png",
+      "original_size": [
+        1264,
+        2480
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/52.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/52.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/52.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/52.jpg"
+      }
+    },
+    {
+      "index": 53,
+      "name": "宝剑三 Three of Swords",
+      "source": "images/53.png",
+      "original_size": [
+        1194,
+        2410
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/53.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/53.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/53.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/53.jpg"
+      }
+    },
+    {
+      "index": 54,
+      "name": "宝剑四 Four of Swords",
+      "source": "images/54.png",
+      "original_size": [
+        1536,
+        2547
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/54.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/54.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/54.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/54.jpg"
+      }
+    },
+    {
+      "index": 55,
+      "name": "宝剑五 Five of Swords",
+      "source": "images/55.png",
+      "original_size": [
+        1536,
+        2544
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/55.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/55.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/55.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/55.jpg"
+      }
+    },
+    {
+      "index": 56,
+      "name": "宝剑六 Six of Swords",
+      "source": "images/56.png",
+      "original_size": [
+        1344,
+        2291
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/56.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/56.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/56.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/56.jpg"
+      }
+    },
+    {
+      "index": 57,
+      "name": "宝剑七 Seven of Swords",
+      "source": "images/57.png",
+      "original_size": [
+        1290,
+        2506
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/57.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/57.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/57.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/57.jpg"
+      }
+    },
+    {
+      "index": 58,
+      "name": "宝剑八 Eight of Swords",
+      "source": "images/58.png",
+      "original_size": [
+        1372,
+        2588
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/58.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/58.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/58.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/58.jpg"
+      }
+    },
+    {
+      "index": 59,
+      "name": "宝剑九 Nine of Swords",
+      "source": "images/59.png",
+      "original_size": [
+        1536,
+        2752
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/59.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/59.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/59.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/59.jpg"
+      }
+    },
+    {
+      "index": 60,
+      "name": "宝剑十 Ten of Swords",
+      "source": "images/60.png",
+      "original_size": [
+        1324,
+        2466
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/60.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/60.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/60.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/60.jpg"
+      }
+    },
+    {
+      "index": 61,
+      "name": "宝剑侍从 Page of Swords",
+      "source": "images/61.png",
+      "original_size": [
+        1268,
+        2484
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/61.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/61.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/61.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/61.jpg"
+      }
+    },
+    {
+      "index": 62,
+      "name": "宝剑骑士 Knight of Swords",
+      "source": "images/62.png",
+      "original_size": [
+        1315,
+        2531
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/62.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/62.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/62.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/62.jpg"
+      }
+    },
+    {
+      "index": 63,
+      "name": "宝剑王后 Queen of Swords",
+      "source": "images/63.png",
+      "original_size": [
+        1286,
+        2502
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/63.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/63.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/63.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/63.jpg"
+      }
+    },
+    {
+      "index": 64,
+      "name": "宝剑国王 King of Swords",
+      "source": "images/64.png",
+      "original_size": [
+        1302,
+        2518
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/64.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/64.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/64.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/64.jpg"
+      }
+    },
+    {
+      "index": 65,
+      "name": "星币一 Ace of Pentacles",
+      "source": "images/65.png",
+      "original_size": [
+        1286,
+        2502
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/65.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/65.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/65.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/65.jpg"
+      }
+    },
+    {
+      "index": 66,
+      "name": "星币二 Two of Pentacles",
+      "source": "images/66.png",
+      "original_size": [
+        1282,
+        2498
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/66.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/66.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/66.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/66.jpg"
+      }
+    },
+    {
+      "index": 67,
+      "name": "星币三 Three of Pentacles",
+      "source": "images/67.png",
+      "original_size": [
+        1316,
+        2532
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/67.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/67.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/67.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/67.jpg"
+      }
+    },
+    {
+      "index": 68,
+      "name": "星币四 Four of Pentacles",
+      "source": "images/68.png",
+      "original_size": [
+        1310,
+        2526
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/68.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/68.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/68.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/68.jpg"
+      }
+    },
+    {
+      "index": 69,
+      "name": "星币五 Five of Pentacles",
+      "source": "images/69.png",
+      "original_size": [
+        1176,
+        2392
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/69.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/69.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/69.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/69.jpg"
+      }
+    },
+    {
+      "index": 70,
+      "name": "星币六 Six of Pentacles",
+      "source": "images/70.png",
+      "original_size": [
+        1214,
+        2430
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/70.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/70.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/70.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/70.jpg"
+      }
+    },
+    {
+      "index": 71,
+      "name": "星币七 Seven of Pentacles",
+      "source": "images/71.png",
+      "original_size": [
+        1250,
+        2466
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/71.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/71.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/71.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/71.jpg"
+      }
+    },
+    {
+      "index": 72,
+      "name": "星币八 Eight of Pentacles",
+      "source": "images/72.png",
+      "original_size": [
+        1240,
+        2456
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/72.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/72.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/72.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/72.jpg"
+      }
+    },
+    {
+      "index": 73,
+      "name": "星币九 Nine of Pentacles",
+      "source": "images/73.png",
+      "original_size": [
+        1250,
+        2466
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/73.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/73.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/73.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/73.jpg"
+      }
+    },
+    {
+      "index": 74,
+      "name": "星币十 Ten of Pentacles",
+      "source": "images/74.png",
+      "original_size": [
+        1276,
+        2364
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/74.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/74.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/74.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/74.jpg"
+      }
+    },
+    {
+      "index": 75,
+      "name": "星币侍从 Page of Pentacles",
+      "source": "images/75.png",
+      "original_size": [
+        1238,
+        2454
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/75.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/75.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/75.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/75.jpg"
+      }
+    },
+    {
+      "index": 76,
+      "name": "星币骑士 Knight of Pentacles",
+      "source": "images/76.png",
+      "original_size": [
+        1252,
+        2468
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/76.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/76.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/76.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/76.jpg"
+      }
+    },
+    {
+      "index": 77,
+      "name": "星币王后 Queen of Pentacles",
+      "source": "images/77.png",
+      "original_size": [
+        1206,
+        2422
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/77.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/77.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/77.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/77.jpg"
+      }
+    },
+    {
+      "index": 78,
+      "name": "星币国王 King of Pentacles",
+      "source": "processed-card-images/review/78-image2-source.png",
+      "original_size": [
+        1003,
+        1568
+      ],
+      "files": {
+        "web/full": "processed-card-images-unified/web/full/78.webp",
+        "web/thumb": "processed-card-images-unified/web/thumb/78.webp",
+        "miniprogram/full": "processed-card-images-unified/miniprogram/full/78.jpg",
+        "miniprogram/thumb": "processed-card-images-unified/miniprogram/thumb/78.jpg"
+      }
+    }
+  ]
+}
