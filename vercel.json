@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/reading.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "headers": [
     {
       "source": "/cards/(.*)",
