@@ -9,20 +9,19 @@
 - 响应式 UI 优化
 
 ### ❌ 待开发
-- 用户认证系统
 - 真实兑换码验证和核销
 - 数据持久化（Supabase）
 - 兑换码管理后台
-- 占卜记录存储
+- 占卜记录存储（7天自动清理）
 
 ---
 
 ## 🎯 后端开发目标
 
-构建一个轻量、可扩展的后端系统，实现：
-1. 用户身份识别（匿名用户支持）
+构建一个极简、无用户系统的后端，实现：
+1. **唯一认证：兑换码** - 不需要用户注册/登录
 2. 兑换码生成、验证、核销
-3. 占卜记录持久化
+3. 占卜记录持久化（7天后自动删除）
 4. 次数管理和扣减
 5. 管理员后台
 
@@ -44,58 +43,42 @@
   - 零运维成本
 
 ### 认证方案
-- **Supabase Auth** + **匿名用户**
-  - 优先支持匿名访问
-  - 可选微信小程序登录（后续）
+- **仅使用兑换码认证** - 无用户系统
+  - 兑换码即身份凭证
+  - 前端存储兑换码到 localStorage
+  - 所有 API 通过兑换码鉴权
 
 ---
 
 ## 📊 数据库设计
 
-### 1. users 表（用户）
-```sql
-CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  platform VARCHAR(20), -- 'web' | 'miniprogram'
-  openid VARCHAR(100), -- 微信 openid（可选）
-  nickname VARCHAR(50),
-  avatar_url TEXT,
-  is_anonymous BOOLEAN DEFAULT true,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-### 2. redemption_codes 表（兑换码）
+### 1. redemption_codes 表（兑换码）⭐️ 核心表
 ```sql
 CREATE TABLE redemption_codes (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  code VARCHAR(50) UNIQUE NOT NULL, -- 兑换码
+  code VARCHAR(50) UNIQUE NOT NULL, -- 兑换码（唯一身份凭证）
   question_limit INTEGER NOT NULL DEFAULT 1, -- 可用问题次数
   question_used INTEGER NOT NULL DEFAULT 0, -- 已用问题次数
   followup_limit_per_question INTEGER NOT NULL DEFAULT 3, -- 每题追问次数
-  total_followup_limit INTEGER, -- 总追问次数（可选）
-  total_followup_used INTEGER DEFAULT 0, -- 已用总追问次数
-  status VARCHAR(20) NOT NULL DEFAULT 'active', -- active | used | expired | disabled
+  status VARCHAR(20) NOT NULL DEFAULT 'active', -- active | expired | disabled
   expires_at TIMESTAMPTZ, -- 过期时间
-  bound_user_id UUID REFERENCES users(id), -- 绑定用户
-  bound_at TIMESTAMPTZ, -- 绑定时间
-  note TEXT, -- 备注
+  first_used_at TIMESTAMPTZ, -- 首次使用时间
+  last_used_at TIMESTAMPTZ, -- 最后使用时间
+  note TEXT, -- 管理员备注
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE INDEX idx_redemption_codes_code ON redemption_codes(code);
-CREATE INDEX idx_redemption_codes_user ON redemption_codes(bound_user_id);
 CREATE INDEX idx_redemption_codes_status ON redemption_codes(status);
+CREATE INDEX idx_redemption_codes_created ON redemption_codes(created_at DESC);
 ```
 
-### 3. tarot_sessions 表（占卜记录）
+### 2. tarot_sessions 表（占卜记录）⏰ 7天自动删除
 ```sql
 CREATE TABLE tarot_sessions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id),
-  redemption_code_id UUID REFERENCES redemption_codes(id),
+  code VARCHAR(50) NOT NULL, -- 兑换码（直接存储，不用外键）
   question TEXT NOT NULL, -- 用户问题
   spread_type VARCHAR(50) DEFAULT 'three-card', -- 牌阵类型
   cards JSONB NOT NULL, -- 三张牌 [{index, name, reversed, position}]
@@ -103,21 +86,22 @@ CREATE TABLE tarot_sessions (
   angel_blessing_card JSONB, -- 天使祝福牌
   angel_blessing_text TEXT, -- 天使祝福文本
   status VARCHAR(20) DEFAULT 'completed', -- completed | in_progress
+  expires_at TIMESTAMPTZ DEFAULT NOW() + INTERVAL '7 days', -- 7天后过期
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_tarot_sessions_user ON tarot_sessions(user_id);
-CREATE INDEX idx_tarot_sessions_code ON tarot_sessions(redemption_code_id);
+CREATE INDEX idx_tarot_sessions_code ON tarot_sessions(code);
+CREATE INDEX idx_tarot_sessions_expires ON tarot_sessions(expires_at);
 CREATE INDEX idx_tarot_sessions_created ON tarot_sessions(created_at DESC);
 ```
 
-### 4. tarot_followups 表（追问记录）
+### 3. tarot_followups 表（追问记录）⏰ 随 session 自动删除
 ```sql
 CREATE TABLE tarot_followups (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   session_id UUID REFERENCES tarot_sessions(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES users(id),
+  code VARCHAR(50) NOT NULL, -- 兑换码
   followup_question TEXT NOT NULL, -- 追问问题
   card JSONB NOT NULL, -- 追问牌 {index, name, reversed}
   ai_reading TEXT, -- 追问解析
@@ -125,10 +109,10 @@ CREATE TABLE tarot_followups (
 );
 
 CREATE INDEX idx_tarot_followups_session ON tarot_followups(session_id);
-CREATE INDEX idx_tarot_followups_user ON tarot_followups(user_id);
+CREATE INDEX idx_tarot_followups_code ON tarot_followups(code);
 ```
 
-### 5. tarot_cards 表（塔罗牌数据）
+### 4. tarot_cards 表（塔罗牌数据）📚 可选，用于后续功能
 ```sql
 CREATE TABLE tarot_cards (
   id SERIAL PRIMARY KEY,
@@ -149,195 +133,181 @@ CREATE TABLE tarot_cards (
 CREATE INDEX idx_tarot_cards_index ON tarot_cards(index);
 ```
 
-### 6. admin_users 表（管理员）
+### 5. admin_users 表（管理员）🔑 简化版
 ```sql
-CREATE TABLE admin_users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  email VARCHAR(100) UNIQUE NOT NULL,
-  role VARCHAR(20) DEFAULT 'admin', -- admin | super_admin
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+-- 方案：直接使用 Supabase Dashboard 管理
+-- 或者使用环境变量配置的 ADMIN_KEY
+-- 不需要单独的表
 ```
 
 ---
 
-## 🔌 API 端点设计
+## 🔌 API 端点设计（简化版）
 
-### 用户相关
-- `POST /api/auth/anonymous` - 创建匿名用户
-- `GET /api/auth/me` - 获取当前用户信息
-
-### 兑换码相关
-- `POST /api/codes/verify` - 校验兑换码
-- `POST /api/codes/bind` - 绑定兑换码到用户
-- `GET /api/codes/status` - 获取兑换码状态和剩余次数
+### 兑换码相关（核心）
+- `POST /api/codes/verify` - 校验兑换码并返回状态
+  - 输入：`{ code }`
+  - 输出：`{ valid, question_left, followup_per_question, expires_at }`
 
 ### 占卜流程相关
-- `POST /api/tarot/session` - 创建新占卜（扣除问题次数）
-- `POST /api/tarot/session/:id/reading` - 保存解析结果
-- `POST /api/tarot/session/:id/followup` - 添加追问（扣除追问次数）
-- `POST /api/tarot/session/:id/angel` - 添加天使祝福
-- `GET /api/tarot/session/:id` - 获取占卜详情
-- `GET /api/tarot/sessions` - 获取用户的占卜历史
+- `POST /api/tarot/start` - 开始新占卜（扣除问题次数）
+  - 输入：`{ code, question, cards }`
+  - 输出：`{ session_id, success }`
+  
+- `POST /api/tarot/save-reading` - 保存 AI 解析结果
+  - 输入：`{ session_id, code, reading }`
+  - 输出：`{ success }`
+
+- `POST /api/tarot/followup` - 添加追问（校验次数）
+  - 输入：`{ session_id, code, question, card }`
+  - 输出：`{ followup_id, followup_left, success }`
+
+- `POST /api/tarot/angel` - 保存天使祝福
+  - 输入：`{ session_id, code, card, text }`
+  - 输出：`{ success }`
+
+- `GET /api/tarot/history?code=xxx` - 获取兑换码的占卜历史（7天内）
+  - 输出：`{ sessions: [...] }`
 
 ### 管理后台相关
-- `POST /api/admin/codes/create` - 生成兑换码
-- `POST /api/admin/codes/batch` - 批量生成兑换码
-- `GET /api/admin/codes` - 兑换码列表（分页、筛选）
-- `PATCH /api/admin/codes/:id` - 更新兑换码状态
+- `POST /api/admin/codes/generate` - 生成兑换码
+  - 需要 `ADMIN_KEY` 验证
+  - 输入：`{ count, question_limit, followup_limit, expires_days }`
+  - 输出：`{ codes: [...] }`
+
+- `GET /api/admin/codes` - 兑换码列表
+  - 需要 `ADMIN_KEY` 验证
+  - 输出：`{ codes: [...], total }`
+
 - `GET /api/admin/stats` - 统计数据
+  - 需要 `ADMIN_KEY` 验证
+  - 输出：`{ total_codes, active_codes, total_sessions, ... }`
 
 ---
 
-## 🚀 开发阶段
+## 🚀 开发阶段（简化到3周）
 
-### 阶段 1：基础设施（第1周）
-**目标：** 搭建 Supabase 并完成基本配置
+### 阶段 1：数据库和核心 API（第1周）⭐️
+**目标：** 搭建 Supabase 并实现核心功能
 
 #### 任务清单
 - [ ] 创建 Supabase 项目
-- [ ] 创建所有数据表
-- [ ] 配置 Row Level Security (RLS) 策略
-- [ ] 设置环境变量
-- [ ] 创建数据库迁移脚本
-
-#### 输出
-- `supabase/migrations/` - 数据库迁移文件
-- `.env` 配置模板更新
-- 数据库访问测试通过
-
----
-
-### 阶段 2：用户认证（第2周）
-**目标：** 实现匿名用户系统
-
-#### 任务清单
-- [ ] 实现匿名用户创建 API
-- [ ] 前端集成用户创建逻辑
-- [ ] 用户 ID 持久化到 localStorage
-- [ ] 用户信息获取 API
-- [ ] 测试用户流程
-
-#### 输出
-- `api/auth/anonymous.js`
-- `api/auth/me.js`
-- 前端 `auth.js` 工具模块
-- 用户认证测试通过
-
----
-
-### 阶段 3：兑换码系统（第3周）
-**目标：** 实现兑换码验证、绑定、次数管理
-
-#### 任务清单
+- [ ] 创建3个核心表（codes, sessions, followups）
 - [ ] 兑换码验证 API
-- [ ] 兑换码绑定 API
-- [ ] 兑换码状态查询 API
-- [ ] 前端集成兑换码逻辑
-- [ ] 替换 localStorage 模拟
-- [ ] 次数扣减和校验
+- [ ] 开始占卜 API（扣除次数）
+- [ ] 保存解析 API
+- [ ] 前端集成兑换码验证
 
 #### 输出
-- `api/codes/verify.js`
-- `api/codes/bind.js`
-- `api/codes/status.js`
+- `supabase/schema.sql` - 数据库脚本
+- `api/codes/verify.js` - 兑换码验证
+- `api/tarot/start.js` - 开始占卜
+- `api/tarot/save-reading.js` - 保存解析
 - 前端兑换码模块更新
-- 次数管理测试通过
 
 ---
 
-### 阶段 4：占卜记录持久化（第4周）
-**目标：** 保存所有占卜数据
+### 阶段 2：追问和历史记录（第2周）
+**目标：** 完成占卜完整流程
 
 #### 任务清单
-- [ ] 创建占卜 session API
-- [ ] 保存 AI 解析结果
-- [ ] 追问记录保存
-- [ ] 天使祝福保存
-- [ ] 获取占卜详情
-- [ ] 占卜历史列表
+- [ ] 追问 API（校验次数）
+- [ ] 天使祝福 API
+- [ ] 历史记录查询 API
+- [ ] 7天自动清理定时任务
+- [ ] 前端完整集成
+- [ ] 端到端测试
 
 #### 输出
-- `api/tarot/session.js`
-- `api/tarot/followup.js`
-- `api/tarot/angel.js`
-- `api/tarot/history.js`
-- 数据持久化测试通过
+- `api/tarot/followup.js` - 追问
+- `api/tarot/angel.js` - 天使祝福
+- `api/tarot/history.js` - 历史记录
+- `supabase/functions/cleanup.sql` - 清理函数
+- 完整流程测试通过
 
 ---
 
-### 阶段 5：管理后台（第5周）
-**目标：** 兑换码生成和管理界面
+### 阶段 3：管理后台和上线（第3周）
+**目标：** 管理功能和生产部署
 
 #### 任务清单
-- [ ] 兑换码生成 API
-- [ ] 批量生成功能
-- [ ] 兑换码列表查询（分页）
-- [ ] 兑换码状态管理
-- [ ] 管理员认证
-- [ ] 管理后台页面
-- [ ] 数据统计看板
-
-#### 输出
-- `api/admin/codes.js`
-- `api/admin/stats.js`
-- `pages/admin.html` - 管理后台页面
-- 管理功能测试通过
-
----
-
-### 阶段 6：集成测试与优化（第6周）
-**目标：** 端到端测试和性能优化
-
-#### 任务清单
-- [ ] 完整流程测试
-- [ ] 并发测试
-- [ ] 错误处理优化
-- [ ] API 性能优化
+- [ ] 兑换码生成 API（带 ADMIN_KEY）
+- [ ] 兑换码列表 API
+- [ ] 统计数据 API
+- [ ] 简单管理页面
 - [ ] 安全审计
+- [ ] 性能优化
 - [ ] 文档完善
 
 #### 输出
-- 测试报告
-- 性能优化记录
-- API 文档
-- 部署检查清单
+- `api/admin/codes/generate.js`
+- `api/admin/codes/list.js`
+- `api/admin/stats.js`
+- `public/admin.html` - 管理后台
+- 生产环境配置完成
 
 ---
 
 ## 🔒 安全考虑
 
-### 1. Row Level Security (RLS)
-```sql
--- 用户只能查看自己的占卜记录
-ALTER TABLE tarot_sessions ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can view own sessions"
-  ON tarot_sessions FOR SELECT
-  USING (auth.uid() = user_id);
-
--- 兑换码只能被绑定用户查看
-ALTER TABLE redemption_codes ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can view bound codes"
-  ON redemption_codes FOR SELECT
-  USING (auth.uid() = bound_user_id);
+### 1. API 认证
+```javascript
+// 所有占卜相关 API 都需要验证兑换码
+function verifyCode(code) {
+  const result = await supabase
+    .from('redemption_codes')
+    .select('*')
+    .eq('code', code)
+    .eq('status', 'active')
+    .single();
+  
+  if (!result.data) throw new Error('无效的兑换码');
+  if (result.data.expires_at && new Date(result.data.expires_at) < new Date()) {
+    throw new Error('兑换码已过期');
+  }
+  return result.data;
+}
 ```
 
-### 2. API 限流
+### 2. 管理员认证
+```javascript
+// 管理员 API 需要验证 ADMIN_KEY
+function verifyAdmin(req) {
+  const adminKey = req.headers['x-admin-key'];
+  if (adminKey !== process.env.ADMIN_KEY) {
+    throw new Error('无权限');
+  }
+}
+```
+
+### 3. API 限流
 - 使用 Vercel Edge Config 或 Upstash Redis
 - 限制：10 次/分钟 per IP
 - 防止恶意刷取次数
 
-### 3. 输入验证
+### 4. 输入验证
 - 所有用户输入进行 sanitize
 - 问题长度限制：10-200 字
-- 兑换码格式校验
+- 兑换码格式校验：`^JUZI-[A-Z0-9]{4}-[A-Z0-9]{4}$`
 
-### 4. 敏感操作
-- 管理员 API 需要验证 Supabase Admin Key
-- 兑换码生成需要管理员权限
-- 次数扣减使用数据库事务
+### 5. 数据清理
+```sql
+-- 定时清理7天前的占卜记录
+CREATE OR REPLACE FUNCTION cleanup_old_sessions()
+RETURNS void AS $$
+BEGIN
+  DELETE FROM tarot_sessions 
+  WHERE expires_at < NOW();
+END;
+$$ LANGUAGE plpgsql;
+
+-- 每天凌晨2点执行
+-- 使用 Supabase Edge Functions 或 pg_cron
+```
+
+### 6. 敏感操作
+- 管理员 API 需要 ADMIN_KEY 验证
+- 次数扣减使用数据库事务保证原子性
 
 ---
 
@@ -384,23 +354,25 @@ CREATE POLICY "Users can view bound codes"
 
 ---
 
-## 🎯 里程碑
+## 🎯 里程碑（3周完成）
 
-### Milestone 1：MVP 后端（2周）
-- 数据库完成
-- 用户系统完成
-- 兑换码基本功能完成
+### Milestone 1：核心功能（1周）
+- ✅ 数据库建表
+- ✅ 兑换码验证
+- ✅ 开始占卜并扣次数
+- ✅ 前端集成
 
-### Milestone 2：完整功能（4周）
-- 占卜记录持久化
-- 管理后台完成
-- 前后端完全集成
+### Milestone 2：完整流程（2周）
+- ✅ 追问功能
+- ✅ 天使祝福
+- ✅ 历史记录
+- ✅ 7天自动清理
 
-### Milestone 3：生产就绪（6周）
-- 测试完成
-- 文档完成
-- 性能优化
-- 正式上线
+### Milestone 3：上线就绪（3周）
+- ✅ 管理后台
+- ✅ 兑换码生成
+- ✅ 测试和优化
+- ✅ 正式上线
 
 ---
 
@@ -414,39 +386,26 @@ CREATE POLICY "Users can view bound codes"
 
 ---
 
-## 🤔 待决策问题
+## 🤔 已确认的设计决策 ✅
 
-1. **兑换码格式？**
-   - 建议：`JUZI-XXXX-XXXX` (16位)
-   - 使用 nanoid 或 uuid 生成
-
-2. **兑换码是否可复用？**
-   - 建议：一码一用，绑定后不可转移
-   - 或：支持多设备，不绑定用户
-
-3. **追问次数规则？**
-   - 方案A：每题固定 3 次追问
-   - 方案B：总共 10 次追问，自由分配
-
-4. **天使祝福是否扣次数？**
-   - 建议：不扣，每个主问题免费 1 次
-
-5. **管理员登录方式？**
-   - 方案A：Supabase Admin 邮箱密码
-   - 方案B：环境变量配置的 Admin Key
+1. **兑换码格式** - `JUZI-XXXX-XXXX` (16字符，简洁易读)
+2. **无用户系统** - 仅使用兑换码作为身份凭证
+3. **追问次数** - 每题固定 3 次追问
+4. **天使祝福** - 不扣次数，每个主问题免费 1 次
+5. **管理员认证** - 使用环境变量 `ADMIN_KEY` 简单验证
+6. **数据保留** - 占卜记录仅保留 7 天，自动清理
 
 ---
 
-## 下一步行动
+## 下一步行动 🚀
 
-**立即开始：**
-1. 创建 Supabase 项目
-2. 运行数据库迁移
-3. 实现第一个 API (匿名用户)
+**立即开始阶段 1：**
+1. ✅ 创建 Supabase 项目
+2. ✅ 运行数据库脚本（3个核心表）
+3. ✅ 实现兑换码验证 API
+4. ✅ 实现开始占卜 API
 
-**需要你确认：**
-- 是否同意这个开发计划？
-- 上述待决策问题的选择
-- 是否有其他需求要补充？
+**需要你提供：**
+- Supabase 项目 URL 和 API Key（创建后）
 
-确认后我们就开始阶段 1 的开发！🚀
+准备开始了吗？我们现在就可以创建数据库脚本！ 🎯
