@@ -43,14 +43,19 @@
   - 零运维成本
 
 ### 认证方案
-- **仅使用兑换码认证** - 无用户系统
+- **前端用户** - 仅使用兑换码认证
   - 兑换码即身份凭证
   - 前端存储兑换码到 localStorage
-  - 所有 API 通过兑换码鉴权
+  - 所有占卜 API 通过兑换码鉴权
+  
+- **管理员后台** - Supabase Auth 认证
+  - 使用 Supabase 邮箱密码登录
+  - 管理员表存储授权邮箱
+  - 管理 API 验证 Supabase Auth Token
 
 ---
 
-## 📊 数据库设计
+## 📊 数据库设计（4个核心表）
 
 ### 1. redemption_codes 表（兑换码）⭐️ 核心表
 ```sql
@@ -133,11 +138,23 @@ CREATE TABLE tarot_cards (
 CREATE INDEX idx_tarot_cards_index ON tarot_cards(index);
 ```
 
-### 5. admin_users 表（管理员）🔑 简化版
+### 5. admin_users 表（管理员）🔑 必需
 ```sql
--- 方案：直接使用 Supabase Dashboard 管理
--- 或者使用环境变量配置的 ADMIN_KEY
--- 不需要单独的表
+CREATE TABLE admin_users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  email VARCHAR(100) UNIQUE NOT NULL, -- 管理员邮箱
+  name VARCHAR(50), -- 姓名
+  role VARCHAR(20) DEFAULT 'admin', -- admin | super_admin
+  is_active BOOLEAN DEFAULT true, -- 是否启用
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_admin_users_email ON admin_users(email);
+
+-- 初始化第一个管理员
+INSERT INTO admin_users (email, name, role) 
+VALUES ('admin@example.com', '超级管理员', 'super_admin');
 ```
 
 ---
@@ -169,19 +186,36 @@ CREATE INDEX idx_tarot_cards_index ON tarot_cards(index);
 - `GET /api/tarot/history?code=xxx` - 获取兑换码的占卜历史（7天内）
   - 输出：`{ sessions: [...] }`
 
-### 管理后台相关
+### 管理后台相关（需要 Supabase Auth Token）
+- `POST /api/admin/auth/login` - 管理员登录
+  - 输入：`{ email, password }`
+  - 输出：`{ token, user, admin }`
+
+- `GET /api/admin/auth/me` - 获取当前管理员信息
+  - 输出：`{ admin, permissions }`
+
 - `POST /api/admin/codes/generate` - 生成兑换码
-  - 需要 `ADMIN_KEY` 验证
+  - 需要管理员 Token
   - 输入：`{ count, question_limit, followup_limit, expires_days }`
   - 输出：`{ codes: [...] }`
 
 - `GET /api/admin/codes` - 兑换码列表
-  - 需要 `ADMIN_KEY` 验证
-  - 输出：`{ codes: [...], total }`
+  - 需要管理员 Token
+  - 支持分页、筛选
+  - 输出：`{ codes: [...], total, page, pageSize }`
+
+- `PATCH /api/admin/codes/:id` - 更新兑换码状态
+  - 需要管理员 Token
+  - 输入：`{ status?, expires_at?, note? }`
+  - 输出：`{ success, code }`
 
 - `GET /api/admin/stats` - 统计数据
-  - 需要 `ADMIN_KEY` 验证
-  - 输出：`{ total_codes, active_codes, total_sessions, ... }`
+  - 需要管理员 Token
+  - 输出：`{ total_codes, active_codes, total_sessions, today_sessions, ... }`
+
+- `GET /api/admin/sessions` - 所有占卜记录（分页）
+  - 需要管理员 Token
+  - 输出：`{ sessions: [...], total }`
 
 ---
 
@@ -192,7 +226,9 @@ CREATE INDEX idx_tarot_cards_index ON tarot_cards(index);
 
 #### 任务清单
 - [ ] 创建 Supabase 项目
-- [ ] 创建3个核心表（codes, sessions, followups）
+- [ ] 创建4个核心表（codes, sessions, followups, admin_users）
+- [ ] 配置 Supabase Auth（启用邮箱密码登录）
+- [ ] 创建第一个管理员账号
 - [ ] 兑换码验证 API
 - [ ] 开始占卜 API（扣除次数）
 - [ ] 保存解析 API
@@ -200,6 +236,7 @@ CREATE INDEX idx_tarot_cards_index ON tarot_cards(index);
 
 #### 输出
 - `supabase/schema.sql` - 数据库脚本
+- `supabase/seed.sql` - 初始数据（第一个管理员）
 - `api/codes/verify.js` - 兑换码验证
 - `api/tarot/start.js` - 开始占卜
 - `api/tarot/save-reading.js` - 保存解析
@@ -231,19 +268,26 @@ CREATE INDEX idx_tarot_cards_index ON tarot_cards(index);
 **目标：** 管理功能和生产部署
 
 #### 任务清单
-- [ ] 兑换码生成 API（带 ADMIN_KEY）
-- [ ] 兑换码列表 API
+- [ ] 管理员登录 API
+- [ ] 管理员认证中间件
+- [ ] 兑换码生成 API
+- [ ] 兑换码列表和管理 API
 - [ ] 统计数据 API
-- [ ] 简单管理页面
+- [ ] 管理后台页面（登录+功能）
 - [ ] 安全审计
 - [ ] 性能优化
 - [ ] 文档完善
 
 #### 输出
-- `api/admin/codes/generate.js`
-- `api/admin/codes/list.js`
-- `api/admin/stats.js`
-- `public/admin.html` - 管理后台
+- `api/admin/auth/login.js` - 管理员登录
+- `api/admin/auth/me.js` - 获取管理员信息
+- `api/admin/codes/generate.js` - 生成兑换码
+- `api/admin/codes/list.js` - 兑换码列表
+- `api/admin/codes/update.js` - 更新兑换码
+- `api/admin/stats.js` - 统计数据
+- `api/admin/sessions.js` - 占卜记录列表
+- `public/admin/index.html` - 管理后台登录
+- `public/admin/dashboard.html` - 管理仪表板
 - 生产环境配置完成
 
 ---
@@ -271,12 +315,25 @@ function verifyCode(code) {
 
 ### 2. 管理员认证
 ```javascript
-// 管理员 API 需要验证 ADMIN_KEY
-function verifyAdmin(req) {
-  const adminKey = req.headers['x-admin-key'];
-  if (adminKey !== process.env.ADMIN_KEY) {
-    throw new Error('无权限');
-  }
+// 管理员 API 需要验证 Supabase Auth Token
+async function verifyAdmin(req) {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) throw new Error('未登录');
+  
+  // 验证 token
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  if (error || !user) throw new Error('Token 无效');
+  
+  // 检查是否是管理员
+  const { data: admin } = await supabase
+    .from('admin_users')
+    .select('*')
+    .eq('email', user.email)
+    .eq('is_active', true)
+    .single();
+    
+  if (!admin) throw new Error('无管理员权限');
+  return admin;
 }
 ```
 
@@ -389,10 +446,10 @@ $$ LANGUAGE plpgsql;
 ## 🤔 已确认的设计决策 ✅
 
 1. **兑换码格式** - `JUZI-XXXX-XXXX` (16字符，简洁易读)
-2. **无用户系统** - 仅使用兑换码作为身份凭证
-3. **追问次数** - 每题固定 3 次追问
-4. **天使祝福** - 不扣次数，每个主问题免费 1 次
-5. **管理员认证** - 使用环境变量 `ADMIN_KEY` 简单验证
+2. **前端用户认证** - 仅使用兑换码作为身份凭证（无用户注册）
+3. **管理员认证** - 使用 Supabase Auth 邮箱密码登录 ⭐️
+4. **追问次数** - 每题固定 3 次追问
+5. **天使祝福** - 不扣次数，每个主问题免费 1 次
 6. **数据保留** - 占卜记录仅保留 7 天，自动清理
 
 ---
@@ -401,11 +458,14 @@ $$ LANGUAGE plpgsql;
 
 **立即开始阶段 1：**
 1. ✅ 创建 Supabase 项目
-2. ✅ 运行数据库脚本（3个核心表）
-3. ✅ 实现兑换码验证 API
-4. ✅ 实现开始占卜 API
+2. ✅ 启用 Email Auth 认证
+3. ✅ 运行数据库脚本（4个核心表 + 第一个管理员）
+4. ✅ 实现兑换码验证 API
+5. ✅ 实现开始占卜 API
+6. ✅ 实现管理员登录 API
 
 **需要你提供：**
 - Supabase 项目 URL 和 API Key（创建后）
+- 第一个管理员的邮箱和密码（用于初始化）
 
 准备开始了吗？我们现在就可以创建数据库脚本！ 🎯
