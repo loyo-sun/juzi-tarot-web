@@ -218,12 +218,72 @@ VALUES
 ON CONFLICT (code) DO NOTHING;
 
 -- ============================================
--- 10. 完成提示
+-- 10. Row Level Security (RLS) 策略
+-- ============================================
+
+-- 注意：Supabase 默认启用 RLS，需要创建策略来允许访问
+
+-- redemption_codes 表策略（允许匿名读取和更新）
+ALTER TABLE redemption_codes ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "允许匿名读取兑换码"
+ON redemption_codes
+FOR SELECT
+TO anon, authenticated
+USING (true);
+
+CREATE POLICY "允许匿名更新兑换码"
+ON redemption_codes
+FOR UPDATE
+TO anon, authenticated
+USING (true)
+WITH CHECK (true);
+
+-- tarot_sessions 表策略（允许匿名完全访问）
+ALTER TABLE tarot_sessions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "允许匿名操作占卜记录"
+ON tarot_sessions
+FOR ALL
+TO anon, authenticated
+USING (true)
+WITH CHECK (true);
+
+-- tarot_followups 表策略（允许匿名完全访问）
+ALTER TABLE tarot_followups ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "允许匿名操作追问记录"
+ON tarot_followups
+FOR ALL
+TO anon, authenticated
+USING (true)
+WITH CHECK (true);
+
+-- admin_users 表策略（仅允许 service_role 访问）
+ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "仅管理员可读取"
+ON admin_users
+FOR SELECT
+TO authenticated
+USING (auth.role() = 'authenticated');
+
+COMMENT ON POLICY "允许匿名读取兑换码" ON redemption_codes IS '前端需要验证兑换码';
+COMMENT ON POLICY "允许匿名更新兑换码" ON redemption_codes IS '前端需要扣减次数和更新使用时间';
+COMMENT ON POLICY "允许匿名操作占卜记录" ON tarot_sessions IS '前端需要创建和查询占卜记录';
+COMMENT ON POLICY "允许匿名操作追问记录" ON tarot_followups IS '前端需要创建追问记录';
+
+-- ============================================
+-- 11. 完成提示
+-- ============================================
+-- ============================================
+-- 11. 完成提示
 -- ============================================
 DO $$
 BEGIN
   RAISE NOTICE '✅ 橘子塔罗数据库初始化完成！';
   RAISE NOTICE '📊 创建了 4 个表：redemption_codes, tarot_sessions, tarot_followups, admin_users';
+  RAISE NOTICE '🔒 已启用 RLS 并配置访问策略';
   RAISE NOTICE '🔑 初始管理员邮箱：qsun@vip.qq.com';
   RAISE NOTICE '⏰ 占卜记录将在 7 天后自动过期';
   RAISE NOTICE '🧹 使用 SELECT cleanup_expired_sessions(); 手动清理过期记录';
