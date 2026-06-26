@@ -1,14 +1,11 @@
 /**
- * 兑换码验证 API
- * POST /api/codes/verify
- * 
- * 功能：验证兑换码有效性并返回剩余次数
+ * 兑换码相关 API（合并）
+ * /api/codes?action=verify
  */
 
-import { verifyRedemptionCode } from '../../lib/supabase.js';
+import { verifyRedemptionCode } from '../lib/supabase.js';
 
 export default async function handler(req, res) {
-  // 设置 CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -32,10 +29,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // 验证兑换码
     const codeData = await verifyRedemptionCode(code);
-
-    // 计算剩余次数
     const questionLeft = codeData.question_limit - codeData.question_used;
     const followupPerQuestion = codeData.followup_limit_per_question;
 
@@ -53,7 +47,6 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('兑换码验证失败:', error);
-    
     return res.status(400).json({
       valid: false,
       error: error.message || '兑换码验证失败'

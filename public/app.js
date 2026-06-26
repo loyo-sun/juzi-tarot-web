@@ -254,7 +254,7 @@ async function requestReading(payload) {
  */
 async function startTarotSession() {
   try {
-    const response = await fetch("/api/tarot/start", {
+    const response = await fetch("/api/tarot?action=start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -297,7 +297,7 @@ async function saveReadingResult(reading) {
   }
   
   try {
-    const response = await fetch("/api/tarot/save-reading", {
+    const response = await fetch("/api/tarot?action=save", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -331,7 +331,7 @@ async function saveFollowup(question, card, reading) {
   }
   
   try {
-    const response = await fetch("/api/tarot/followup", {
+    const response = await fetch("/api/tarot?action=followup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -372,7 +372,7 @@ async function saveAngelBlessing(card, text) {
   }
   
   try {
-    const response = await fetch("/api/tarot/angel", {
+    const response = await fetch("/api/tarot?action=angel", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -531,7 +531,7 @@ el.codeForm.addEventListener("submit", async (event) => {
   
   try {
     // 调用兑换码验证 API
-    const response = await fetch("/api/codes/verify", {
+    const response = await fetch("/api/codes?action=verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code })

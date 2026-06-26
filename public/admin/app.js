@@ -61,7 +61,7 @@ async function init() {
     state.admin = JSON.parse(userStr);
     
     // 验证 token
-    const response = await apiRequest('/api/admin/auth/me');
+    const response = await apiRequest('/api/admin-auth?action=me');
     if (response.success) {
       state.admin = response.admin;
       localStorage.setItem('admin_user', JSON.stringify(state.admin));
@@ -142,7 +142,7 @@ async function loadPage(page) {
 
 // 加载统计页面
 async function loadStatsPage() {
-  const response = await apiRequest('/api/admin/stats');
+  const response = await apiRequest('/api/admin-stats');
   const stats = response.stats;
 
   const contentArea = document.getElementById('contentArea');
@@ -291,7 +291,7 @@ async function generateCodes(e) {
   resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>生成中...</p></div>';
 
   try {
-    const response = await apiRequest('/api/admin/codes/generate', {
+    const response = await apiRequest('/api/admin-codes?action=generate', {
       method: 'POST',
       body: JSON.stringify({
         count,
@@ -326,7 +326,7 @@ window.loadCodesList = async function(page = 1, status = '', search = '') {
   if (search) params.append('search', search);
 
   try {
-    const response = await apiRequest(`/api/admin/codes/list?${params}`);
+    const response = await apiRequest(`/api/admin-codes?action=list&${params}`);
     
     const tableDiv = document.getElementById('codesTable');
     if (response.codes.length === 0) {
@@ -418,7 +418,7 @@ window.toggleCodeStatus = async function(id, currentStatus) {
   }
 
   try {
-    await apiRequest(`/api/admin/codes/update?id=${id}`, {
+    await apiRequest(`/api/admin-codes?action=update&id=${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ status: newStatus })
     });
@@ -463,7 +463,7 @@ window.loadSessionsList = async function(page = 1, code = '') {
   if (code) params.append('code', code);
 
   try {
-    const response = await apiRequest(`/api/admin/sessions/list?${params}`);
+    const response = await apiRequest(`/api/admin-sessions?action=list&${params}`);
     
     const tableDiv = document.getElementById('sessionsTable');
     if (response.sessions.length === 0) {
@@ -548,7 +548,7 @@ window.searchSessions = function() {
 // 查看占卜详情
 window.viewSessionDetail = async function(id) {
   try {
-    const response = await apiRequest(`/api/admin/sessions/detail?id=${id}`);
+    const response = await apiRequest(`/api/admin-sessions?action=detail&id=${id}`);
     const session = response.session;
 
     alert(`占卜详情：\n\n问题：${session.question}\n\n解析：${session.ai_reading ? session.ai_reading.substring(0, 200) + '...' : '暂无'}\n\n追问数：${session.followups.length}`);
