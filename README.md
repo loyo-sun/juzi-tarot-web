@@ -1,70 +1,169 @@
-# 橘子塔罗 Web 端
+# 🍊 橘子塔罗 Web 端
 
-这是根据 `橘子塔罗需求文档.md` 生成的 Web 端第一版应用。
+一个优雅的塔罗占卜 Web 应用，包含完整的前端占卜流程和管理后台。
 
-## 已实现
+## ✨ 特性
 
-- Web 端一屏式塔罗牌桌布局
-- 兑换码展示与本地更换
-- 主问题输入
-- 洗牌连接状态
-- 抽三张牌
-- 三牌阵展示：过去 / 根源、现在 / 状态、未来 / 建议
-- AI 牌阵解析接口代理
-- 继续追问
-- 天使祝福
-- 保存结果为 `.txt`
-- 使用真实卡牌资源：`0` 为牌背，`1-78` 为塔罗牌
+### 用户端
+- 🎴 完整的塔罗牌占卜流程（兑换码→提问→洗牌→抽牌→解析）
+- 🤖 AI 驱动的智能牌面解读
+- 💭 支持追问功能（每题最多3次）
+- 👼 天使祝福卡（每题1次）
+- 💫 流畅的动画效果（洗牌、切牌、抽牌）
+- 📱 完美的响应式设计（手机端一屏显示）
+- 🔒 兑换码验证系统
 
-## AI API 环境变量
+### 管理后台
+- 📊 实时统计数据看板
+- 🎫 兑换码批量生成（雪花算法）
+- 📝 兑换码管理（搜索、筛选、禁用）
+- 🔮 占卜记录查看
+- 🔐 管理员认证系统
 
-复制 `.env.example` 为 `.env`，并填写：
+## 🎯 技术栈
+
+### 前端
+- 原生 HTML/CSS/JavaScript（无框架依赖）
+- 响应式设计（支持移动端）
+- LocalStorage（兑换码存储）
+
+### 后端
+- Vercel Serverless Functions
+- Supabase（数据库 + 认证）
+- AI API 集成（智能解读）
+
+### 数据库
+- PostgreSQL（Supabase）
+- Row Level Security（数据安全）
+- 自动清理（7天过期）
+
+## 🚀 快速开始
+
+### 1. 本地开发
 
 ```bash
-AI_API_URL=https://api.openai.com/v1/chat/completions
-AI_API_KEY=replace-with-your-api-key
-AI_MODEL_NAME=gpt-4o-mini
-```
+# 安装依赖
+npm install
 
-字段说明：
-
-- `AI_API_URL`：AI API 请求 URL
-- `AI_API_KEY`：AI API Key
-- `AI_MODEL_NAME`：模型名称
-
-未配置时，`/api/reading` 会返回本地演示解析，方便先调 UI。
-
-## 本地启动
-
-```bash
+# 启动开发服务器
 npm run dev
+
+# 访问应用
+# 用户端：http://localhost:3000
+# 管理后台：http://localhost:3000/admin
 ```
 
-默认地址：
+### 2. 部署到 Vercel
 
-```text
-http://localhost:3024
+项目使用 Vercel 自动部署，推送到 main 分支即可触发部署。
+
+### 3. 配置 Supabase
+
+1. 创建 Supabase 项目
+2. 运行 `supabase/schema.sql` 初始化数据库
+3. 创建管理员账号
+4. 配置环境变量
+
+详细步骤见 `DEPLOYMENT-GUIDE.md`
+
+## 🔧 环境变量
+
+需要在 Vercel 中配置以下环境变量：
+
+```bash
+# AI API 配置
+AI_API_KEY=你的AI密钥
+AI_API_BASE_URL=你的AI服务地址
+AI_MODEL=你的模型名称
+
+# Supabase 配置
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_ANON_KEY=你的anon_key
+SUPABASE_SERVICE_KEY=你的service_role_key
 ```
 
-## Vercel 部署
+## 📚 文档
 
-项目使用静态前端 + `api/reading.js` Serverless Function。部署到 Vercel 后，在项目环境变量中配置：
+- **部署指南**: `DEPLOYMENT-GUIDE.md` - 完整的部署步骤
+- **API 文档**: `API-REFERENCE.md` - 所有 API 接口说明
+- **管理后台使用**: `ADMIN-USER-GUIDE.md` - 管理后台操作指南
+- **故障排查**: `TROUBLESHOOTING.md` - 常见问题解决方案
+- **开发计划**: `BACKEND-PLAN.md` - 完整的开发规划
+- **你的任务**: `YOUR-TODO-LIST.md` - 用户待办事项
 
-- `AI_API_URL`
-- `AI_API_KEY`
-- `AI_MODEL_NAME`
+## 🎮 功能概览
 
-## 资源目录
+### 用户端流程
 
-- `public/cards/0.webp`：卡牌背面
-- `public/cards/1.webp` 到 `public/cards/78.webp`：塔罗牌
-- `public/cards/manifest.json`：卡牌序号和名称映射
-- `public/assets/orange-cat-tarot.png`：橘猫主视觉
+1. **输入兑换码** → 验证并显示剩余次数
+2. **输入问题** → 至少5个字符
+3. **洗牌动画** → 3秒动画效果
+4. **抽取3张牌** → 多行密集布局
+5. **AI 解析** → 智能解读牌面
+6. **追问** → 每题最多3次
+7. **天使祝福** → 每题1次免费
 
-## 后续建议
+### 管理后台功能
 
-- 接入 Supabase Auth 或匿名用户 ID
-- 接入 Supabase 兑换码表
-- 将本地次数模拟替换为真实兑换码核销
-- 增加占卜记录存储
-- 增加后台兑换码管理页
+1. **统计看板** → 实时数据展示
+2. **生成兑换码** → 批量生成（雪花算法）
+3. **管理兑换码** → 查看、搜索、禁用
+4. **占卜记录** → 查看所有占卜
+
+## 📊 数据库设计
+
+### 核心表
+
+- `redemption_codes` - 兑换码表
+- `tarot_sessions` - 占卜记录（7天自动清理）
+- `tarot_followups` - 追问记录
+- `admin_users` - 管理员表
+
+详见 `supabase/schema.sql`
+
+## 🔐 安全特性
+
+- 兑换码验证（唯一认证方式）
+- 管理员 JWT 认证
+- Row Level Security（RLS）
+- API 权限验证
+- 雪花算法生成码（无规律）
+
+## 🧪 测试
+
+### 诊断工具
+
+访问 `/debug.html` 进行系统诊断：
+- 检查环境变量配置
+- 测试数据库连接
+- 验证 API 功能
+- 查看测试兑换码
+
+### 测试兑换码
+
+```
+JUZI-TEST-0001 - 3次问题
+JUZI-TEST-0002 - 5次问题
+JUZI-TEST-0003 - 10次问题
+```
+
+## 📈 项目进度
+
+- ✅ 前端完整流程（100%）
+- ✅ 后端核心 API（100%）
+- ✅ 管理后台（100%）
+- ✅ 文档完善（100%）
+
+**总进度**: 100% 🎉
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可
+
+MIT License
+
+---
+
+© 2026 橘子塔罗 · 用科技连接心灵
