@@ -199,6 +199,16 @@ async function handleList(req, res) {
     query = query.eq('status', status);
   }
 
+  // 新增：激活状态筛选
+  if (req.query.is_active) {
+    query = query.eq('is_active', req.query.is_active === 'true');
+  }
+
+  // 新增：使用状态筛选
+  if (req.query.usage_status) {
+    query = query.eq('usage_status', req.query.usage_status);
+  }
+
   // 搜索
   if (search) {
     query = query.or(`code.ilike.%${search}%,note.ilike.%${search}%`);
@@ -278,8 +288,11 @@ async function handleUpdate(req, res) {
 
   const { status, expires_at, note } = req.body;
 
+  // 新增：支持更新 is_active
+  const { is_active } = req.body;
+
   // 验证至少有一个字段需要更新
-  if (!status && !expires_at && note === undefined) {
+  if (!status && !expires_at && note === undefined && is_active === undefined) {
     return res.status(400).json({
       success: false,
       error: '至少需要提供一个更新字段'
@@ -311,6 +324,7 @@ async function handleUpdate(req, res) {
   if (status) updateData.status = status;
   if (expires_at) updateData.expires_at = expires_at;
   if (note !== undefined) updateData.note = note;
+  if (is_active !== undefined) updateData.is_active = is_active;
 
   // 执行更新
   const { data, error } = await supabaseAdmin
