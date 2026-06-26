@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>橘子塔罗 - 管理后台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- 顶部导航 -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-logo">🍊 橘子塔罗</div>
+        <div class="topbar-title">管理后台</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user" id="topbarUser">加载中...</div>
+        <button class="btn btn-logout" onclick="logout()">退出</button>
+      </div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="main-content">
+      <!-- 侧边栏 -->
+      <div class="sidebar">
+        <ul class="sidebar-menu">
+          <li><a href="#stats" class="menu-item active" data-page="stats">📊 统计数据</a></li>
+          <li><a href="#codes" class="menu-item" data-page="codes">🎫 兑换码管理</a></li>
+          <li><a href="#sessions" class="menu-item" data-page="sessions">🔮 占卜记录</a></li>
+        </ul>
+      </div>
+
+      <!-- 内容区 -->
+      <div class="content" id="contentArea">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>加载中...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

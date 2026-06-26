@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>橘子塔罗 - 管理后台登录</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-logo">
+        <h1>🍊 橘子塔罗</h1>
+        <p>管理后台</p>
+      </div>
+
+      <div id="alert" style="display: none;"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">邮箱</label>
+          <input 
+            type="email" 
+            id="email" 
+            class="form-control" 
+            placeholder="请输入管理员邮箱"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">密码</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-control" 
+            placeholder="请输入密码"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="loginBtn">
+          <span id="btnText">登录</span>
+        </button>
+      </form>
+
+      <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-light);">
+        © 2026 橘子塔罗 · 管理后台
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const btnText = document.getElementById('btnText');
+    const alertDiv = document.getElementById('alert');
+
+    // 检查是否已登录
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      // 验证 token 是否有效
+      verifyToken(token);
+    }
+
+    async function verifyToken(token) {
+      try {
+        const response = await fetch('/api/admin/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          // Token 有效，跳转到仪表板
+          window.location.href = '/admin/dashboard.html';
+        } else {
+          // Token 无效，清除
+          localStorage.removeItem('admin_token');
+          localStorage.removeItem('admin_user');
+        }
+      } catch (error) {
+        console.error('验证 token 失败:', error);
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_user');
+      }
+    }
+
+    function showAlert(message, type = 'error') {
+      alertDiv.textContent = message;
+      alertDiv.className = type === 'error' ? 'alert alert-error' : 'alert alert-success';
+      alertDiv.style.display = 'block';
+
+      // 3秒后自动隐藏
+      setTimeout(() => {
+        alertDiv.style.display = 'none';
+      }, 3000);
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        showAlert('请输入邮箱和密码');
+        return;
+      }
+
+      // 显示加载状态
+      loginBtn.disabled = true;
+      btnText.textContent = '登录中...';
+
+      try {
+        const response = await fetch('/api/admin/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // 保存 token 和用户信息
+          localStorage.setItem('admin_token', data.token);
+          localStorage.setItem('admin_user', JSON.stringify(data.admin));
+
+          showAlert('登录成功，正在跳转...', 'success');
+
+          // 跳转到仪表板
+          setTimeout(() => {
+            window.location.href = '/admin/dashboard.html';
+          }, 500);
+        } else {
+          showAlert(data.error || '登录失败');
+        }
+      } catch (error) {
+        console.error('登录失败:', error);
+        showAlert('登录失败，请检查网络连接');
+      } finally {
+        loginBtn.disabled = false;
+        btnText.textContent = '登录';
+      }
+    });
+
+    // 回车键登录
+    passwordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        loginForm.dispatchEvent(new Event('submit'));
+      }
+    });
+  </script>
+</body>
+</html>
