@@ -93,7 +93,7 @@ export async function createReading(payload) {
       messages: [
         {
           role: "system",
-          content: "你是橘子塔罗的橘猫塔罗助手。你提供温柔、启发式、边界清晰的塔罗解读。"
+          content: "你是橘子塔塔的橘猫塔罗助手。你提供温柔、启发式、边界清晰的塔罗解读。"
         },
         {
           role: "user",

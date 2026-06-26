@@ -1,4 +1,4 @@
--- 橘子塔罗数据库初始化脚本
+-- 橘子塔塔数据库初始化脚本
 -- 创建日期: 2026-06-25
 -- 说明: 包含4个核心表 + 索引 + 初始管理员
 
@@ -281,7 +281,7 @@ COMMENT ON POLICY "允许匿名操作追问记录" ON tarot_followups IS '前端
 -- ============================================
 DO $$
 BEGIN
-  RAISE NOTICE '✅ 橘子塔罗数据库初始化完成！';
+  RAISE NOTICE '✅ 橘子塔塔数据库初始化完成！';
   RAISE NOTICE '📊 创建了 4 个表：redemption_codes, tarot_sessions, tarot_followups, admin_users';
   RAISE NOTICE '🔒 已启用 RLS 并配置访问策略';
   RAISE NOTICE '🔑 初始管理员邮箱：qsun@vip.qq.com';

@@ -1,4 +1,4 @@
-# 橘子塔罗部署指南
+# 橘子塔塔部署指南
 
 ## 📋 部署前检查清单
 
@@ -46,7 +46,7 @@ npm install
 
 **预期结果:**
 ```
-✅ 橘子塔罗数据库初始化完成！
+✅ 橘子塔塔数据库初始化完成！
 📊 创建了 4 个表：redemption_codes, tarot_sessions, tarot_followups, admin_users
 🔑 初始管理员邮箱：qsun@vip.qq.com
 ⏰ 占卜记录将在 7 天后自动过期

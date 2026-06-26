@@ -78,5 +78,5 @@ createServer(async (req, res) => {
     send(res, 404, "Not found");
   }
 }).listen(port, () => {
-  console.log(`橘子塔罗 Web running at http://localhost:${port}`);
+  console.log(`橘子塔塔 Web running at http://localhost:${port}`);
 });

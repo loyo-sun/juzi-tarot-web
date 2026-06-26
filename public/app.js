@@ -493,7 +493,7 @@ async function createAngelBlessing() {
 
 function saveResult() {
   const content = [
-    "橘子塔罗",
+    "橘子塔塔",
     `兑换码：${state.code}`,
     `问题：${state.question}`,
     "",
@@ -508,7 +508,7 @@ function saveResult() {
   const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "橘子塔罗结果.txt";
+  link.download = "橘子塔塔结果.txt";
   link.click();
   URL.revokeObjectURL(link.href);
 }
