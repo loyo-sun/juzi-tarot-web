@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>橘子塔罗 - 系统诊断</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      margin-bottom: 16px;
+      color: #667eea;
+      font-size: 1.3rem;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 8px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .status:last-child {
+      border-bottom: none;
+    }
+
+    .status-label {
+      font-weight: 600;
+      min-width: 180px;
+      color: #666;
+    }
+
+    .status-value {
+      flex: 1;
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+    }
+
+    .status-ok {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .status-error {
+      color: #ef4444;
+      font-weight: 600;
+    }
+
+    .status-warning {
+      color: #f59e0b;
+      font-weight: 600;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #5568d3;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .error-detail {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #991b1b;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .success-detail {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #166534;
+    }
+
+    .loading {
+      text-align: center;
+      color: #666;
+      padding: 20px;
+    }
+
+    .test-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .test-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    .test-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .test-result {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .test-result.success {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+
+    .test-result.error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+
+    pre {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 橘子塔罗系统诊断</h1>
+
+    <button id="runDiagnostics" onclick="runDiagnostics()">开始诊断</button>
+
+    <div id="results"></div>
+
+    <!-- 测试区域 -->
+    <div class="card" id="testSection" style="display: none;">
+      <h2>🧪 功能测试</h2>
+      
+      <div class="test-section">
+        <h3 style="margin-bottom: 12px; color: #666;">测试兑换码验证</h3>
+        <input 
+          type="text" 
+          id="testCode" 
+          class="test-input" 
+          placeholder="输入兑换码（如：JUZI-TEST-0001）"
+          value="JUZI-TEST-0001"
+        />
+        <button onclick="testVerifyCode()">测试验证 API</button>
+        <div id="verifyResult"></div>
+      </div>
+
+      <div class="test-section">
+        <h3 style="margin-bottom: 12px; color: #666;">测试开始占卜</h3>
+        <input 
+          type="text" 
+          id="testQuestion" 
+          class="test-input" 
+          placeholder="输入问题"
+          value="测试问题：我的未来如何？"
+        />
+        <button onclick="testStartReading()">测试开始占卜 API</button>
+        <div id="startResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let diagnosticsData = null;
+
+    async function runDiagnostics() {
+      const button = document.getElementById('runDiagnostics');
+      const resultsDiv = document.getElementById('results');
+      
+      button.disabled = true;
+      button.textContent = '诊断中...';
+      resultsDiv.innerHTML = '<div class="card"><div class="loading">正在检查配置...</div></div>';
+
+      try {
+        const response = await fetch('/api/debug/config-check');
+        const data = await response.json();
+        diagnosticsData = data.diagnostics;
+        
+        renderDiagnostics(data.diagnostics);
+        
+        // 如果连接成功，显示测试区域
+        if (data.diagnostics.database_connection?.status === '✓ 连接成功') {
+          document.getElementById('testSection').style.display = 'block';
+        }
+      } catch (error) {
+        resultsDiv.innerHTML = `
+          <div class="card">
+            <h2>❌ 诊断失败</h2>
+            <div class="error-detail">
+              <strong>错误：</strong>${error.message}
+              <br><br>
+              <strong>可能原因：</strong>
+              <br>• API 路由不存在或未部署
+              <br>• 网络连接问题
+              <br>• Vercel 部署失败
+            </div>
+          </div>
+        `;
+      } finally {
+        button.disabled = false;
+        button.textContent = '重新诊断';
+      }
+    }
+
+    function renderDiagnostics(diag) {
+      const resultsDiv = document.getElementById('results');
+      
+      let html = '';
+
+      // 环境信息
+      html += `
+        <div class="card">
+          <h2>🌍 环境信息</h2>
+          ${Object.entries(diag.environment).map(([key, value]) => `
+            <div class="status">
+              <span class="status-label">${key}</span>
+              <span class="status-value">${value}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      // Supabase 配置
+      html += `
+        <div class="card">
+          <h2>🗄️ Supabase 配置</h2>
+          ${Object.entries(diag.supabase).map(([key, value]) => {
+            const isConfigured = value.includes('✓');
+            return `
+              <div class="status">
+                <span class="status-label">${key.replace(/_/g, ' ').toUpperCase()}</span>
+                <span class="status-value ${isConfigured ? 'status-ok' : 'status-error'}">${value}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      // AI 配置
+      html += `
+        <div class="card">
+          <h2>🤖 AI 配置</h2>
+          ${Object.entries(diag.ai).map(([key, value]) => {
+            const isConfigured = value.includes('✓') || (typeof value === 'string' && !value.includes('✗'));
+            return `
+              <div class="status">
+                <span class="status-label">${key.replace(/_/g, ' ').toUpperCase()}</span>
+                <span class="status-value ${isConfigured ? 'status-ok' : 'status-error'}">${value}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      // 数据库连接
+      const dbConn = diag.database_connection;
+      const isConnected = dbConn.status === '✓ 连接成功';
+      
+      html += `
+        <div class="card">
+          <h2>🔌 数据库连接</h2>
+          <div class="status">
+            <span class="status-label">连接状态</span>
+            <span class="status-value ${isConnected ? 'status-ok' : 'status-error'}">${dbConn.status}</span>
+          </div>
+          ${dbConn.error ? `
+            <div class="error-detail">
+              <strong>错误信息：</strong> ${dbConn.error}
+              ${dbConn.details ? `<br><br><strong>详细信息：</strong> ${dbConn.details}` : ''}
+              ${dbConn.hint ? `<br><br><strong>提示：</strong> ${dbConn.hint}` : ''}
+            </div>
+          ` : ''}
+          ${dbConn.message ? `
+            <div class="success-detail">${dbConn.message}</div>
+          ` : ''}
+        </div>
+      `;
+
+      // 测试兑换码
+      if (diag.test_codes) {
+        const testCodes = diag.test_codes;
+        html += `
+          <div class="card">
+            <h2>🎫 测试兑换码</h2>
+            <div class="status">
+              <span class="status-label">查询状态</span>
+              <span class="status-value ${testCodes.status.includes('✓') ? 'status-ok' : 'status-error'}">${testCodes.status}</span>
+            </div>
+            ${testCodes.found !== undefined ? `
+              <div class="status">
+                <span class="status-label">找到数量</span>
+                <span class="status-value">${testCodes.found} 个</span>
+              </div>
+            ` : ''}
+            ${testCodes.codes ? `
+              <pre>${JSON.stringify(testCodes.codes, null, 2)}</pre>
+            ` : ''}
+            ${testCodes.error ? `
+              <div class="error-detail">${testCodes.error}</div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      resultsDiv.innerHTML = html;
+    }
+
+    async function testVerifyCode() {
+      const code = document.getElementById('testCode').value.trim();
+      const resultDiv = document.getElementById('verifyResult');
+      
+      if (!code) {
+        resultDiv.innerHTML = '<div class="test-result error">请输入兑换码</div>';
+        return;
+      }
+
+      resultDiv.innerHTML = '<div class="test-result">测试中...</div>';
+
+      try {
+        const response = await fetch('/api/codes/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+
+        const data = await response.json();
+        
+        if (data.valid) {
+          resultDiv.innerHTML = `
+            <div class="test-result success">
+              <strong>✓ 验证成功</strong>
+              <pre>${JSON.stringify(data, null, 2)}</pre>
+            </div>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <div class="test-result error">
+              <strong>✗ 验证失败</strong>
+              <br>错误: ${data.error}
+            </div>
+          `;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="test-result error">
+            <strong>✗ 请求失败</strong>
+            <br>${error.message}
+          </div>
+        `;
+      }
+    }
+
+    async function testStartReading() {
+      const code = document.getElementById('testCode').value.trim();
+      const question = document.getElementById('testQuestion').value.trim();
+      const resultDiv = document.getElementById('startResult');
+      
+      if (!code || !question) {
+        resultDiv.innerHTML = '<div class="test-result error">请输入兑换码和问题</div>';
+        return;
+      }
+
+      resultDiv.innerHTML = '<div class="test-result">测试中...</div>';
+
+      const testCards = [
+        { index: 3, name: "女祭司", reversed: false, position: "过去" },
+        { index: 7, name: "恋人", reversed: true, position: "现在" },
+        { index: 15, name: "节制", reversed: false, position: "未来" }
+      ];
+
+      try {
+        const response = await fetch('/api/tarot/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, question, cards: testCards })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          resultDiv.innerHTML = `
+            <div class="test-result success">
+              <strong>✓ 开始占卜成功</strong>
+              <pre>${JSON.stringify(data, null, 2)}</pre>
+            </div>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <div class="test-result error">
+              <strong>✗ 开始占卜失败</strong>
+              <br>错误: ${data.error}
+            </div>
+          `;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="test-result error">
+            <strong>✗ 请求失败</strong>
+            <br>${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // 页面加载时自动运行诊断
+    window.addEventListener('load', () => {
+      runDiagnostics();
+    });
+  </script>
+</body>
+</html>
