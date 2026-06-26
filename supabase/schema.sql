@@ -167,7 +167,42 @@ SELECT
 COMMENT ON VIEW admin_stats IS '管理后台统计数据';
 
 -- ============================================
--- 8. 初始化数据
+-- 8. RPC 函数：原子性扣减问题次数
+-- ============================================
+CREATE OR REPLACE FUNCTION use_question_count(code_id UUID)
+RETURNS BOOLEAN AS $$
+DECLARE
+  current_used INTEGER;
+  current_limit INTEGER;
+BEGIN
+  -- 获取当前次数（加行锁防止并发问题）
+  SELECT question_used, question_limit 
+  INTO current_used, current_limit
+  FROM redemption_codes
+  WHERE id = code_id
+  FOR UPDATE;
+  
+  -- 检查是否还有次数
+  IF current_used >= current_limit THEN
+    RAISE EXCEPTION '兑换码次数已用完';
+  END IF;
+  
+  -- 扣减次数
+  UPDATE redemption_codes
+  SET 
+    question_used = question_used + 1,
+    last_used_at = NOW(),
+    first_used_at = COALESCE(first_used_at, NOW())
+  WHERE id = code_id;
+  
+  RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
+COMMENT ON FUNCTION use_question_count IS '原子性扣减问题次数，防止并发问题';
+
+-- ============================================
+-- 9. 初始化数据
 -- ============================================
 
 -- 插入第一个管理员
@@ -183,7 +218,7 @@ VALUES
 ON CONFLICT (code) DO NOTHING;
 
 -- ============================================
--- 完成提示
+-- 10. 完成提示
 -- ============================================
 DO $$
 BEGIN

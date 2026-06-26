@@ -6,5 +6,8 @@
   "scripts": {
     "dev": "node local-server.mjs",
     "check": "node --check public/app.js && node --check api/reading.js && node --check local-server.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
   }
 }

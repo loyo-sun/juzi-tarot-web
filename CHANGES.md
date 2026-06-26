@@ -1,147 +1,191 @@
-# 橘子塔罗 UI 修改说明
+# 橘子塔罗后端开发进度
 
-## 修改日期
-2026-06-25
+## 📅 2026-06-26 更新
 
-## 修改内容
+### ✅ 已完成的后端 API（6个）
 
-### ✅ 问题 1: 兑换码输入与提问显示逻辑优化
-**修改前:**
-- 兑换码输入页面显示问题次数和追问次数
-- 提问环节同时显示兑换码
+#### 1. 兑换码验证 API
+- **路径**: `POST /api/codes/verify`
+- **功能**: 验证兑换码有效性，返回剩余次数
+- **文件**: `api/codes/verify.js`
 
-**修改后:**
-- ✅ 兑换码输入页面：仅显示兑换码输入框，不显示次数信息
-- ✅ 提问及后续环节：顶部右侧显示"提问次数"和"追问次数"的配额面板
-- 次数信息从 `step === "question"` 开始显示
+#### 2. 开始占卜 API
+- **路径**: `POST /api/tarot/start`
+- **功能**: 创建新占卜记录并扣减问题次数
+- **文件**: `api/tarot/start.js`
 
-### ✅ 问题 2: 单屏显示所有步骤
-**修改前:**
-- 使用多个 view 切换，每次只显示一个页面
+#### 3. 保存解析结果 API
+- **路径**: `POST /api/tarot/save-reading`
+- **功能**: 保存 AI 对塔罗牌的解析结果
+- **文件**: `api/tarot/save-reading.js`
 
-**修改后:**
-- ✅ 改为单页应用结构
-- ✅ 所有步骤通过 `display: none/flex` 控制显示/隐藏
-- ✅ 每个步骤独立为 `.step-section`，通过 `updateStep()` 函数切换
-- ✅ 移除了原来的步骤指示器(stepper)，改为右上角的配额显示
+#### 4. 添加追问 API
+- **路径**: `POST /api/tarot/followup`
+- **功能**: 为已有占卜添加追问，验证追问次数限制
+- **文件**: `api/tarot/followup.js`
 
-### ✅ 问题 3: 提问输入框样式优化
-**修改前:**
-- 输入框较高(72px)
-- 样式已经基本符合要求
+#### 5. 保存天使祝福 API
+- **路径**: `POST /api/tarot/angel`
+- **功能**: 为占卜添加天使祝福卡（不扣次数）
+- **文件**: `api/tarot/angel.js`
 
-**修改后:**
-- ✅ 单行文本输入框 `<input>` 类型
-- ✅ 字体大小：`clamp(20px, 2.5vw, 32px)` - 响应式大字体
-- ✅ 完全居中显示
-- ✅ 圆角胶囊形状 (border-radius: 999px)
-- ✅ 高度优化为 64px
-- ✅ 添加 focus 状态：金色边框 + 阴影效果
+#### 6. 获取历史记录 API
+- **路径**: `GET /api/tarot/history?code=JUZI-XXXX-XXXX`
+- **功能**: 获取指定兑换码的所有占卜记录（7天内）
+- **文件**: `api/tarot/history.js`
 
-### ✅ 问题 4: 洗牌和切牌动画增强
-**修改前:**
-- 简单的浮动和切牌动画
-- 动画效果较基础
+---
 
-**修改后:**
-- ✅ **洗牌动画** (`shuffleRotate`):
-  - 5张牌叠加旋转
-  - 四个方向移动和旋转
-  - 3秒循环动画，每张牌延迟0.6秒
-  
-- ✅ **切牌动画** (`cutLeft` 和 `cutRight`):
-  - 左右两堆牌分离和合并
-  - 更大的移动距离(180px vs 70px)
-  - 动画更流畅，细节更丰富
-  
-- ✅ **能量光环** (`energyPulse`):
-  - 两层光环脉动
-  - 缩放和透明度变化
-  - 营造神秘氛围
+### ✅ 已完成的基础设施
 
-- ✅ **自动完成**: 洗牌动画播放3.5秒后自动进入抽牌环节
+#### 数据库设计
+- **文件**: `supabase/schema.sql`
+- **内容**: 
+  - 4个核心表：redemption_codes, tarot_sessions, tarot_followups, admin_users
+  - 自动更新时间戳触发器
+  - 定时清理过期记录函数
+  - 统计数据视图
+  - RPC 函数：原子性扣减问题次数
+  - 测试兑换码：JUZI-TEST-0001, JUZI-TEST-0002
 
-### ✅ 问题 5: 抽牌布局改为多行密集排列
-**修改前:**
-- 单层弧形排列
-- 78张牌在一条弧线上
+#### Supabase 客户端工具
+- **文件**: `lib/supabase.js`
+- **内容**:
+  - 普通客户端（anon key）
+  - 管理员客户端（service_role key）
+  - verifyRedemptionCode() - 兑换码验证
+  - decrementQuestionCount() - 扣减次数
+  - updateFirstUsed() - 更新首次使用时间
 
-**修改后:**
-- ✅ **三行排列**: 每行26张牌
-- ✅ **密集布局**: 卡牌尺寸从74px降为64px
-- ✅ **弧形保持**: 每行独立形成弧形
-- ✅ **层次感**: 通过 `rowIndex * 85px` 实现垂直错开
-- ✅ **hover效果**: 悬停时卡牌上浮12px + 金色光晕
-- ✅ **选中效果**: 已选卡牌变暗(opacity: 0.3) + 下沉8px
+#### 前端集成
+- **文件**: `public/app.js`
+- **更新内容**:
+  - 兑换码验证流程
+  - 创建占卜会话（扣除次数）
+  - 保存 AI 解析结果
+  - 保存追问记录
+  - 保存天使祝福
+  - 实时显示剩余次数
 
-## 技术实现细节
+#### 依赖管理
+- **文件**: `package.json`
+- **新增**: `@supabase/supabase-js@^2.39.0`
 
-### HTML 结构变化
-```html
-<!-- 移除了 -->
-<ol class="stepper">...</ol>
+---
 
-<!-- 新增了 -->
-<div class="quota-display" id="quota-display">
-  <div><span>提问次数</span><strong>2</strong></div>
-  <div><span>追问次数</span><strong>3</strong></div>
-</div>
+### 📋 待开发功能（管理后台）
 
-<!-- 所有 section 改为统一结构 -->
-<section class="step-section" id="step-xxx" data-step="xxx">
-  <div class="step-content">...</div>
-</section>
+#### 阶段 3：管理后台 API（第3周）
+
+1. **管理员登录 API**
+   - 路径: `POST /api/admin/auth/login`
+   - 文件: `api/admin/auth/login.js`
+
+2. **获取管理员信息 API**
+   - 路径: `GET /api/admin/auth/me`
+   - 文件: `api/admin/auth/me.js`
+
+3. **生成兑换码 API**
+   - 路径: `POST /api/admin/codes/generate`
+   - 文件: `api/admin/codes/generate.js`
+
+4. **兑换码列表 API**
+   - 路径: `GET /api/admin/codes`
+   - 文件: `api/admin/codes/list.js`
+
+5. **更新兑换码 API**
+   - 路径: `PATCH /api/admin/codes/:id`
+   - 文件: `api/admin/codes/update.js`
+
+6. **统计数据 API**
+   - 路径: `GET /api/admin/stats`
+   - 文件: `api/admin/stats.js`
+
+7. **占卜记录列表 API**
+   - 路径: `GET /api/admin/sessions`
+   - 文件: `api/admin/sessions.js`
+
+8. **管理后台页面**
+   - 登录页: `public/admin/index.html`
+   - 仪表板: `public/admin/dashboard.html`
+   - 样式: `public/admin/styles.css`
+   - 脚本: `public/admin/app.js`
+
+---
+
+## 🚀 部署步骤
+
+### 1. 安装依赖
+```bash
+npm install
 ```
 
-### JavaScript 核心变化
-```javascript
-// 状态管理
-state.currentStep = "code"  // 当前步骤
-state.questionLeft = 2      // 剩余提问次数
-state.followLeft = 3        // 剩余追问次数
+### 2. 配置 Supabase
+1. 在 Supabase 项目（juzitaluo）的 SQL Editor 中运行 `supabase/schema.sql`
+2. 创建第一个管理员账号：
+   - 在 Supabase Auth 中创建用户：`qsun@vip.qq.com`
+   - 设置密码并确认邮箱
 
-// 步骤切换函数
-function updateStep(step) {
-  // 隐藏所有步骤
-  // 显示当前步骤
-  // 更新配额显示
-  // 洗牌自动完成逻辑
-}
+### 3. 配置环境变量
+创建 `.env` 文件（参考 `.env.example`）：
+```bash
+# AI API 配置
+AI_API_KEY=your_api_key
+AI_API_BASE_URL=your_api_base_url
+AI_MODEL=your_model
 
-// 多行抽牌布局算法
-const cardsPerRow = 26;
-const rowIndex = Math.floor((index - 1) / cardsPerRow);
-const colIndex = (index - 1) % cardsPerRow;
+# Supabase 配置
+SUPABASE_URL=https://juzitaluo.supabase.co
+SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_KEY=your_service_role_key
 ```
 
-### CSS 关键变化
-- 全局布局从 `grid` 改为 `flexbox`
-- 移除 `.view` 和 `.stepper` 相关样式
-- 新增 `.step-section` 和 `.step-content` 布局
-- 新增 `.quota-display` 配额显示样式
-- 优化 `.deck-card` 多行排列逻辑
-- 增强动画效果的流畅度和视觉冲击力
+### 4. 部署到 Vercel
+```bash
+# 推送到 GitHub
+git add .
+git commit -m "完成后端核心 API"
+git push
 
-## 文件修改列表
-- ✅ `/public/index.html` - HTML 结构重构
-- ✅ `/public/app.js` - JavaScript 逻辑重构
-- ✅ `/public/styles.css` - CSS 完全重写
+# Vercel 会自动部署
+# 在 Vercel 项目设置中配置环境变量
+```
 
-## 备份文件
-- `/public/styles.css.backup` - 原始 CSS 备份
+### 5. 测试 API
+使用测试兑换码验证功能：
+- `JUZI-TEST-0001` - 3次问题，每题3次追问
+- `JUZI-TEST-0002` - 5次问题，每题3次追问
 
-## 测试建议
-1. 启动本地服务器: `npm run dev`
-2. 访问 `http://localhost:3024`
-3. 测试流程:
-   - 输入兑换码 → 检查是否没有显示次数
-   - 进入提问页 → 检查右上角是否显示配额
-   - 提交问题 → 观察洗牌和切牌动画
-   - 等待3.5秒 → 自动进入抽牌
-   - 观察78张牌的三行排列
-   - 抽取3张牌 → 检查交互效果
+---
 
-## 已知优化点
-- 移动端响应式已适配 (< 980px, < 620px)
-- 动画性能已优化 (使用 transform 而非 position)
-- 无障碍支持保留 (aria-label)
+## 📊 当前进度
+
+- **阶段 1（核心功能）**: ✅ 100% 完成
+- **阶段 2（完整流程）**: ✅ 100% 完成
+- **阶段 3（管理后台）**: ⏳ 0% 待开始
+
+**总进度**: 66% (2/3 阶段完成)
+
+---
+
+## 🎯 下一步
+
+1. 安装依赖 `npm install`
+2. 在 Supabase 运行数据库脚本
+3. 配置环境变量
+4. 测试前端占卜流程
+5. 开始开发管理后台
+
+---
+
+## 💡 技术亮点
+
+1. **原子性操作**: 使用数据库 RPC 函数确保次数扣减的原子性
+2. **错误处理**: 所有 API 都有完善的错误处理和提示
+3. **安全性**: 兑换码验证、会话归属验证
+4. **7天自动清理**: 数据库触发器自动管理过期记录
+5. **前后端分离**: API 和前端完全解耦，易于维护
+
+---
+
+最后更新：2026-06-26

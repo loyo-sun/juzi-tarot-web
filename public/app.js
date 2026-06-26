@@ -4,12 +4,14 @@ const state = {
   selected: [],
   followups: [],
   currentStep: "code",
-  code: "JUZI-2026-ABCD",
+  code: "",
+  sessionId: null,
   question: "",
-  questionLeft: 2,
+  questionLeft: 0,
   followLeft: 3,
   angelUsed: false,
-  isReading: false
+  isReading: false,
+  codeData: null
 };
 
 const steps = ["code", "question", "shuffle", "draw", "result"];
@@ -114,7 +116,8 @@ function resetReadingState() {
   state.available = state.cards.filter((card) => card.index > 0).map((card) => card.index);
   state.selected = [];
   state.followups = [];
-  state.followLeft = 3;
+  state.sessionId = null;
+  state.followLeft = state.codeData?.followupPerQuestion || 3;
   state.angelUsed = false;
   state.isReading = false;
   el.followInput.value = "";
@@ -191,10 +194,15 @@ function drawCard(button) {
   renderSelectedStrip();
 
   if (state.selected.length === 3) {
-    window.setTimeout(() => {
+    window.setTimeout(async () => {
       renderResult();
       updateStep("result");
-      createMainReading();
+      
+      // 创建占卜会话
+      await startTarotSession();
+      
+      // 生成主解析
+      await createMainReading();
     }, 500);
   }
 }
@@ -241,6 +249,154 @@ async function requestReading(payload) {
   return response.json();
 }
 
+/**
+ * 开始占卜会话（创建记录并扣减次数）
+ */
+async function startTarotSession() {
+  try {
+    const response = await fetch("/api/tarot/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code: state.code,
+        question: state.question,
+        cards: state.selected
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.error || "创建占卜会话失败");
+    }
+    
+    // 保存会话 ID 和更新剩余次数
+    state.sessionId = result.sessionId;
+    state.questionLeft = result.questionLeft;
+    state.followLeft = result.followupLeft;
+    
+    // 更新显示
+    updateFollowControls();
+    
+    console.log("占卜会话创建成功:", result);
+    
+  } catch (error) {
+    console.error("创建占卜会话失败:", error);
+    alert("创建占卜记录失败: " + error.message);
+    throw error;
+  }
+}
+
+/**
+ * 保存 AI 解析结果
+ */
+async function saveReadingResult(reading) {
+  if (!state.sessionId) {
+    console.warn("没有会话 ID，跳过保存解析结果");
+    return;
+  }
+  
+  try {
+    const response = await fetch("/api/tarot/save-reading", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: state.sessionId,
+        code: state.code,
+        reading
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.error || "保存解析失败");
+    }
+    
+    console.log("解析结果已保存");
+    
+  } catch (error) {
+    console.error("保存解析结果失败:", error);
+    // 不影响用户体验，仅记录错误
+  }
+}
+
+/**
+ * 保存追问
+ */
+async function saveFollowup(question, card, reading) {
+  if (!state.sessionId) {
+    console.warn("没有会话 ID，跳过保存追问");
+    return;
+  }
+  
+  try {
+    const response = await fetch("/api/tarot/followup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: state.sessionId,
+        code: state.code,
+        question,
+        card,
+        reading
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.error || "保存追问失败");
+    }
+    
+    // 更新剩余追问次数
+    state.followLeft = result.followupLeft;
+    updateFollowControls();
+    
+    console.log("追问已保存:", result);
+    
+  } catch (error) {
+    console.error("保存追问失败:", error);
+    alert("保存追问失败: " + error.message);
+    throw error;
+  }
+}
+
+/**
+ * 保存天使祝福
+ */
+async function saveAngelBlessing(card, text) {
+  if (!state.sessionId) {
+    console.warn("没有会话 ID，跳过保存天使祝福");
+    return;
+  }
+  
+  try {
+    const response = await fetch("/api/tarot/angel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: state.sessionId,
+        code: state.code,
+        card,
+        text
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.error || "保存天使祝福失败");
+    }
+    
+    console.log("天使祝福已保存");
+    
+  } catch (error) {
+    console.error("保存天使祝福失败:", error);
+    // 不影响用户体验，仅记录错误
+  }
+}
+
 async function createMainReading() {
   state.isReading = true;
   updateFollowControls();
@@ -253,8 +409,13 @@ async function createMainReading() {
       question: state.question,
       cards: state.selected
     });
+    
     el.readingTitle.textContent = result.configured ? "牌阵解析完成" : "演示解析";
     el.readingText.textContent = result.reading;
+    
+    // 保存解析结果到后端
+    await saveReadingResult(result.reading);
+    
   } catch (error) {
     el.readingTitle.textContent = "解析暂时失败";
     el.readingText.textContent = error instanceof Error ? error.message : "请稍后再试。";
@@ -269,7 +430,6 @@ async function createFollowup() {
   if (!question || state.followLeft <= 0 || state.isReading) return;
 
   const followupCard = randomCardFromDeck();
-  state.followLeft -= 1;
   state.isReading = true;
   updateFollowControls();
   el.readingTitle.textContent = "正在生成追问解析";
@@ -284,10 +444,15 @@ async function createFollowup() {
       followupCard,
       followups: state.followups
     });
+    
     state.followups.push({ question, card: followupCard, reading: result.reading });
     el.readingTitle.textContent = result.configured ? "追问解析完成" : "追问演示解析";
     el.readingText.textContent = `追问：${question}\n抽牌：${followupCard.name} · ${followupCard.reversed ? "逆位" : "正位"}\n\n${result.reading}`;
     el.followInput.value = "";
+    
+    // 保存追问到后端
+    await saveFollowup(question, followupCard, result.reading);
+    
   } catch (error) {
     el.readingTitle.textContent = "追问解析失败";
     el.readingText.textContent = error instanceof Error ? error.message : "请稍后再试。";
@@ -311,7 +476,13 @@ async function createAngelBlessing() {
       cards: state.selected,
       followups: state.followups
     });
+    
     el.blessingBox.textContent = result.reading;
+    
+    // 保存天使祝福到后端（假设抽一张随机牌）
+    const angelCard = randomCardFromDeck();
+    await saveAngelBlessing(angelCard, result.reading);
+    
   } catch {
     el.blessingBox.textContent = "愿你在还没有完全确定答案的时候，也能先稳稳照顾自己。";
   } finally {
@@ -342,19 +513,94 @@ function saveResult() {
   URL.revokeObjectURL(link.href);
 }
 
-el.codeForm.addEventListener("submit", (event) => {
+el.codeForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  state.code = el.codeInput.value.trim().toUpperCase() || "JUZI-2026-ABCD";
-  updateStep("question");
+  const code = el.codeInput.value.trim().toUpperCase();
+  
+  if (!code) {
+    alert("请输入兑换码");
+    return;
+  }
+  
+  // 显示加载状态
+  el.codeInput.disabled = true;
+  const submitBtn = el.codeForm.querySelector("button[type='submit']");
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = "验证中...";
+  submitBtn.disabled = true;
+  
+  try {
+    // 调用兑换码验证 API
+    const response = await fetch("/api/codes/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code })
+    });
+    
+    const result = await response.json();
+    
+    if (!result.valid) {
+      alert(result.error || "兑换码无效");
+      return;
+    }
+    
+    // 保存兑换码信息到状态
+    state.code = code;
+    state.codeData = result;
+    state.questionLeft = result.questionLeft;
+    state.followLeft = result.followupPerQuestion;
+    
+    // 如果次数用完，提示用户
+    if (state.questionLeft <= 0) {
+      alert("该兑换码次数已用完");
+      return;
+    }
+    
+    // 进入提问步骤
+    updateStep("question");
+    
+  } catch (error) {
+    console.error("验证兑换码失败:", error);
+    alert("验证失败，请检查网络连接");
+  } finally {
+    el.codeInput.disabled = false;
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+  }
 });
 
-el.questionForm.addEventListener("submit", (event) => {
+el.questionForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   state.question = el.questionInput.value.trim();
-  if (!state.question) return;
+  
+  if (!state.question || state.question.length < 5) {
+    alert("问题至少需要5个字符");
+    return;
+  }
+  
+  if (!state.code) {
+    alert("请先输入兑换码");
+    updateStep("code");
+    return;
+  }
+  
+  // 显示加载状态
+  el.questionInput.disabled = true;
+  const submitBtn = el.questionForm.querySelector("button[type='submit']");
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = "开始中...";
+  submitBtn.disabled = true;
+  
   resetReadingState();
   el.drawQuestion.textContent = state.question;
+  
+  // 先进入洗牌阶段，体验更流畅
   updateStep("shuffle");
+  
+  // 恢复按钮状态
+  el.questionInput.disabled = false;
+  submitBtn.textContent = originalText;
+  submitBtn.disabled = false;
 });
 
 el.followInput.addEventListener("input", updateFollowControls);
