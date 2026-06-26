@@ -246,6 +246,8 @@ async function handleList(req, res) {
       question_left: code.question_limit - code.question_used,
       followup_limit_per_question: code.followup_limit_per_question,
       status: code.status,
+      is_active: code.is_active,  // 新增
+      usage_status: code.usage_status,  // 新增
       expires_at: code.expires_at,
       first_used_at: code.first_used_at,
       last_used_at: code.last_used_at,

@@ -290,6 +290,7 @@ const ManageCodesComponent = {
 
           <el-form-item label="激活状态">
             <el-select v-model="searchForm.is_active" placeholder="全部" clearable>
+              <el-option label="全部" value="" />
               <el-option label="启用" value="true" />
               <el-option label="停用" value="false" />
             </el-select>
@@ -297,6 +298,7 @@ const ManageCodesComponent = {
 
           <el-form-item label="使用状态">
             <el-select v-model="searchForm.usage_status" placeholder="全部" clearable>
+              <el-option label="全部" value="" />
               <el-option label="未使用" value="unused" />
               <el-option label="使用中" value="in_use" />
               <el-option label="已使用" value="used" />
@@ -421,8 +423,8 @@ const ManageCodesComponent = {
     
     const searchForm = reactive({
       search: '',
-      is_active: '',
-      usage_status: '',
+      is_active: '',  // 默认为空（全部）
+      usage_status: '',  // 默认为空（全部）
       expires_date: null
     });
 
