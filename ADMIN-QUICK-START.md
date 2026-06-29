@@ -1,4 +1,4 @@
-# 🚀 管理后台 V2 快速入门
+# 🚀 管理后台快速入门
 
 ## 📋 你需要做什么
 
@@ -25,9 +25,9 @@
 
 代码已推送到 GitHub，Vercel 会自动部署（约 2-3 分钟）。
 
-### 第三步：访问新后台
+### 第三步：访问管理后台
 
-**登录地址**：https://juzi.loyo.work/admin-v2/login.html
+**登录地址**：https://juzi.loyo.work/admin/login.html
 
 **你的账号**：
 - 邮箱：qsun@vip.qq.com
@@ -134,13 +134,9 @@
 ## ⚠️ 重要提示
 
 1. **必须先执行数据库迁移**
-   - 不执行迁移，新后台无法正常工作
+   - 不执行迁移，管理后台无法正常工作
    
-2. **旧后台仍可使用**
-   - 地址：https://juzi.loyo.work/admin
-   - 数据完全兼容
-   
-3. **新字段自动维护**
+2. **新字段自动维护**
    - `usage_status` 由数据库触发器自动更新
    - 你只需要管理"激活状态"
 
@@ -161,14 +157,11 @@
 ### Q: 新状态字段显示为空
 **A**: 确认数据库迁移成功，清除浏览器缓存后重试
 
-### Q: 想用回旧后台
-**A**: 访问 https://juzi.loyo.work/admin 即可，数据完全兼容
-
 ---
 
 ## 📞 需要帮助？
 
-详细文档：[ADMIN-V2-UPGRADE-GUIDE.md](./ADMIN-V2-UPGRADE-GUIDE.md)
+详细文档：[ADMIN-UPGRADE-GUIDE.md](./ADMIN-UPGRADE-GUIDE.md)
 
 ---
 

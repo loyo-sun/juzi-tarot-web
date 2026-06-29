@@ -185,7 +185,7 @@
               localStorage.setItem('admin_token', data.token);
               ElMessage.success('登录成功');
               setTimeout(() => {
-                window.location.href = '/admin-v2/index.html';
+                window.location.href = '/admin/index.html';
               }, 500);
             } else {
               ElMessage.error(data.error || '登录失败');

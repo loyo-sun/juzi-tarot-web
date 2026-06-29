@@ -1,6 +1,6 @@
-# 🔄 管理后台 V2 升级指南
+# 🔄 管理后台升级指南
 
-**版本**: V2.0  
+**版本**: 2.0  
 **更新时间**: 2026-06-26  
 **UI 框架**: Element Plus
 
@@ -113,17 +113,17 @@
 代码已更新，推送到 GitHub 后 Vercel 会自动部署。
 
 **新增文件**:
-- `public/admin-v2/index.html` - 主页面
-- `public/admin-v2/login.html` - 登录页
-- `public/admin-v2/app.js` - 应用逻辑
+- `public/admin/index.html` - 主页面
+- `public/admin/login.html` - 登录页
+- `public/admin/app.js` - 应用逻辑
 - `supabase/migration-v2.sql` - 数据库迁移脚本
 
 **更新文件**:
 - `api/admin-codes.js` - 支持新字段
 
-### 第三步：访问新后台
+### 第三步：访问管理后台
 
-**登录地址**: https://juzi.loyo.work/admin-v2/login.html
+**登录地址**: https://juzi.loyo.work/admin/login.html
 
 **默认账号**:
 - 邮箱：qsun@vip.qq.com
@@ -262,16 +262,14 @@
 
 ## ⚠️ 注意事项
 
-### 向后兼容
+### 数据兼容性
 
 1. **旧字段保留**
    - `status` 字段仍然保留
    - 旧的 API 仍然可用
-   - 旧管理后台（`/admin`）仍可访问
 
-2. **渐进式升级**
-   - 可以同时运行新旧管理后台
-   - 数据完全兼容
+2. **平滑升级**
+   - 数据库迁移不影响现有数据
    - 无需停机维护
 
 ### 数据一致性
